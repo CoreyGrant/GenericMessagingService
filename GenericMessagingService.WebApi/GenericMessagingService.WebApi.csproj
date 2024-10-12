@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GenericMessagingService.Services\GenericMessagingService.Services.csproj" />
+    <ProjectReference Include="..\GenericMessagingService.Types\GenericMessagingService.Types.csproj" />
+  </ItemGroup>
+
+</Project>
