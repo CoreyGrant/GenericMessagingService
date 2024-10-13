@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GenericMessagingService.Services.Templating
+namespace GenericMessagingService.Services.Templating.Services
 {
     internal class DatabaseTemplateService : ITemplateService
     {
@@ -17,15 +17,15 @@ namespace GenericMessagingService.Services.Templating
             DatabaseTemplateSettings settings,
             IDatabaseStrategyResolver databaseStrategyResolver)
         {
-            this.databaseService = databaseStrategyResolver.Resolve(settings?.Type);
+            databaseService = databaseStrategyResolver.Resolve(settings?.Type);
         }
 
-        public async Task<TemplateResponse?> GetTemplate(TemplateRequest request)
+        public async Task<TemplateResponse> GetTemplate(TemplateRequest request)
         {
             // get the template from the database
             // may also contain the subject
-            var result = await this.databaseService.GetTemplate(request.TemplateName);
-            if(!result.HasValue) { return null; }
+            var result = await databaseService.GetTemplate(request.TemplateName);
+            if (!result.HasValue) { return null; }
             // need to perform replacements on the database template and subject
             var subject = Replace(result.Value.Subject, request.Data);
             var body = Replace(result.Value.Template, request.Data);

@@ -1,4 +1,5 @@
 ﻿using GenericMessagingService.Services.Templating.Database;
+using GenericMessagingService.Services.Templating.Services;
 using GenericMessagingService.Types.Config;
 using GenericMessagingService.Types.Template;
 using RazorEngineCore;

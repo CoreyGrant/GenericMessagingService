@@ -3,13 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericMessagingService.WebApi", "GenericMessagingService.WebApi\GenericMessagingService.WebApi.csproj", "{919741D5-FA67-47AA-925B-9E30D563C545}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenericMessagingService.WebApi", "GenericMessagingService.WebApi\GenericMessagingService.WebApi.csproj", "{919741D5-FA67-47AA-925B-9E30D563C545}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericMessagingService.Types", "GenericMessagingService.Types\GenericMessagingService.Types.csproj", "{9DCFD0D2-D7FA-4B9D-9E7E-F7A79EF4A7A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenericMessagingService.Types", "GenericMessagingService.Types\GenericMessagingService.Types.csproj", "{9DCFD0D2-D7FA-4B9D-9E7E-F7A79EF4A7A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericMessagingService.Client", "GenericMessagingService.Client\GenericMessagingService.Client.csproj", "{FB7B1B15-EFD0-4A67-8189-CB7B6D4A6B95}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenericMessagingService.Client", "GenericMessagingService.Client\GenericMessagingService.Client.csproj", "{FB7B1B15-EFD0-4A67-8189-CB7B6D4A6B95}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericMessagingService.Services", "GenericMessagingService.Services\GenericMessagingService.Services.csproj", "{9D1D5FBA-1FDE-4AD5-9F58-158119846800}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenericMessagingService.Services", "GenericMessagingService.Services\GenericMessagingService.Services.csproj", "{9D1D5FBA-1FDE-4AD5-9F58-158119846800}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericMessagingService.Services.Tests", "GenericMessagingService.Services.Tests\GenericMessagingService.Services.Tests.csproj", "{115C7742-B31F-40D9-8088-6740B801584D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericMessagingService.Client.Tests", "GenericMessagingService.Client.Tests\GenericMessagingService.Client.Tests.csproj", "{FE7B5518-2154-4298-88D6-75BD7C5B8E6B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +37,14 @@ Global
 		{9D1D5FBA-1FDE-4AD5-9F58-158119846800}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9D1D5FBA-1FDE-4AD5-9F58-158119846800}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9D1D5FBA-1FDE-4AD5-9F58-158119846800}.Release|Any CPU.Build.0 = Release|Any CPU
+		{115C7742-B31F-40D9-8088-6740B801584D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{115C7742-B31F-40D9-8088-6740B801584D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{115C7742-B31F-40D9-8088-6740B801584D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{115C7742-B31F-40D9-8088-6740B801584D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE7B5518-2154-4298-88D6-75BD7C5B8E6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE7B5518-2154-4298-88D6-75BD7C5B8E6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE7B5518-2154-4298-88D6-75BD7C5B8E6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE7B5518-2154-4298-88D6-75BD7C5B8E6B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

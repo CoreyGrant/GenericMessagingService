@@ -9,7 +9,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace GenericMessagingService.Services.Templating
+namespace GenericMessagingService.Services.Templating.Services
 {
     internal class RazorTemplateService : ITemplateService
     {
@@ -27,7 +27,7 @@ namespace GenericMessagingService.Services.Templating
             _compiledTemplates = LoadCompiledTemplates();
         }
 
-        public async Task<TemplateResponse?> GetTemplate(TemplateRequest request)
+        public async Task<TemplateResponse> GetTemplate(TemplateRequest request)
         {
             if (TryMatchName(request.TemplateName, out var location))
             {

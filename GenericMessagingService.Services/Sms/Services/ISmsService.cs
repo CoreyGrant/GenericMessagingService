@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GenericMessagingService.Services.Sms
+namespace GenericMessagingService.Services.Sms.Services
 {
     public interface ISmsService
     {

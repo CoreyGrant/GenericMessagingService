@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Twilio;
 using Twilio.Rest.Api.V2010.Account;
 
-namespace GenericMessagingService.Services.Sms
+namespace GenericMessagingService.Services.Sms.Services
 {
     internal class TwilioService : ISmsService
     {
@@ -21,7 +21,7 @@ namespace GenericMessagingService.Services.Sms
         public async Task SendSms(string message, IEnumerable<string> to, string from)
         {
             TwilioClient.Init(settings.AccountSid, settings.AuthToken);
-            foreach(var toNumber in to) 
+            foreach (var toNumber in to)
             {
                 await MessageResource.CreateAsync(
                     new Twilio.Types.PhoneNumber(toNumber),

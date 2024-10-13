@@ -10,9 +10,9 @@ namespace GenericMessagingService.Services.Templating.Database
 {
     internal class SqlServerService : IDatabaseService
     {
-        private readonly EmailSettings settings;
+        private readonly DatabaseTemplateSettings settings;
 
-        public SqlServerService(EmailSettings settings) 
+        public SqlServerService(DatabaseTemplateSettings settings) 
         {
             this.settings = settings;
         }
@@ -21,17 +21,16 @@ namespace GenericMessagingService.Services.Templating.Database
         {
             try
             {
-                var dbSettings = settings.DatabaseTemplates;
-                var query = !string.IsNullOrEmpty(dbSettings.SubjectColumn)
-                    ? $@"SELECT {dbSettings.TemplateColumn}, {dbSettings.SubjectColumn}
-                    FROM {dbSettings.Table}
-                    WHERE {dbSettings.LookupColumn} = '{templateName}'"
-                    : $@"SELECT {dbSettings.TemplateColumn}
-                    FROM {dbSettings.Table}
-                    WHERE {dbSettings.LookupColumn} = '{templateName}'";
+                var query = !string.IsNullOrEmpty(settings.SubjectColumn)
+                    ? $@"SELECT {settings.TemplateColumn}, {settings.SubjectColumn}
+                    FROM {settings.Table}
+                    WHERE {settings.LookupColumn} = '{templateName}'"
+                    : $@"SELECT {settings.TemplateColumn}
+                    FROM {settings.Table}
+                    WHERE {settings.LookupColumn} = '{templateName}'";
                 string template = null;
                 string subject = null;
-                using (var connection = new SqlConnection(dbSettings.ConnectionString))
+                using (var connection = new SqlConnection(settings.ConnectionString))
                 {
                     await connection.OpenAsync();
                     var command = connection.CreateCommand();
@@ -39,8 +38,8 @@ namespace GenericMessagingService.Services.Templating.Database
                     var reader = command.ExecuteReader();
                     while (reader.Read())
                     {
-                        template = reader[dbSettings.TemplateColumn].ToString();
-                        var subjectColumn = reader[dbSettings.SubjectColumn];
+                        template = reader[settings.TemplateColumn].ToString();
+                        var subjectColumn = reader[settings.SubjectColumn];
                         if (subjectColumn != null)
                         {
                             subject = subjectColumn.ToString();

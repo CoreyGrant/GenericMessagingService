@@ -72,8 +72,18 @@
             }
           },
           "required": [ "accountSid", "authToken" ]
+        },
+        "folder": {
+          "type": "object",
+          "properties": {
+            "folderPath": {
+              "type": "string"
+            }
+          },
+          "required": [ "folderPath" ]
         }
-      }
+      },
+      "oneOf": [{"required": ["twilio"]}, {"required": ["folder"]}]
     },
     "template": {
       "properties": {

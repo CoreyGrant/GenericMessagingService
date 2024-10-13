@@ -1,4 +1,5 @@
-﻿using GenericMessagingService.Types.Config;
+﻿using GenericMessagingService.Services.Email.Services;
+using GenericMessagingService.Types.Config;
 using System;
 using System.Collections.Generic;
 using System.Linq;

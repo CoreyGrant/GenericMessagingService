@@ -35,10 +35,4 @@ namespace GenericMessagingService.Types.Config
     {
         public string ApiKey { get; set; }
     }
-
-    public class FolderSettings
-    {
-        public string FolderPath { get; set; }
-        // need to handle file storage solutions
-    }
 }

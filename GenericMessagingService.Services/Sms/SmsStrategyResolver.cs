@@ -1,4 +1,5 @@
-﻿using GenericMessagingService.Types.Config;
+﻿using GenericMessagingService.Services.Sms.Services;
+using GenericMessagingService.Types.Config;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,14 @@ namespace GenericMessagingService.Services.Sms
 
         public ISmsService Resolve()
         {
-            return new TwilioService(smsSettings.Twilio);
+            if (smsSettings.Folder != null)
+            {
+                return new FolderSmsService(smsSettings.Folder);
+            }
+            else
+            {
+                return new TwilioService(smsSettings.Twilio);
+            }
         }
     }
 }

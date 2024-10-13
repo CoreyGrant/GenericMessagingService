@@ -1,6 +1,7 @@
 ﻿using GenericMessagingService.Services.Email;
 using GenericMessagingService.Services.Templating;
 using GenericMessagingService.Services.Templating.Database;
+using GenericMessagingService.Services.Templating.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;

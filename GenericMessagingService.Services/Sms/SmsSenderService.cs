@@ -1,12 +1,9 @@
-﻿using GenericMessagingService.Services.Templating;
+﻿using GenericMessagingService.Services.Sms.Services;
+using GenericMessagingService.Services.Templating.Services;
 using GenericMessagingService.Types.Config;
-using GenericMessagingService.Types.Email;
 using GenericMessagingService.Types.Sms;
-using SendGrid.Helpers.Mail;
-using System;
+using GenericMessagingService.Types.Template;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace GenericMessagingService.Services.Sms

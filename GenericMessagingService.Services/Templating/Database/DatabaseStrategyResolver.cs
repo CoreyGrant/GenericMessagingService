@@ -17,18 +17,18 @@ namespace GenericMessagingService.Services.Templating.Database
     /// </summary>
     internal class DatabaseStrategyResolver : IDatabaseStrategyResolver
     {
-        private readonly EmailSettings emailSettings;
+        private readonly TemplateSettings settings;
 
-        public DatabaseStrategyResolver(EmailSettings emailSettings) 
+        public DatabaseStrategyResolver(TemplateSettings settings) 
         {
-            this.emailSettings = emailSettings;
+            this.settings = settings;
         }
 
         public IDatabaseService Resolve(string? type)
         {
             if(!string.IsNullOrEmpty(type) || type.ToLower() == "sqlserver")
             {
-                return new SqlServerService(emailSettings);
+                return new SqlServerService(settings.DatabaseTemplates);
             }
             throw new Exception("Could not resolve database of type: " + type);
         }

@@ -7,13 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GenericMessagingService.Services.Email
+namespace GenericMessagingService.Services.Email.Services
 {
     internal class SendGridEmailService : IEmailService
     {
         private readonly SendGridSettings settings;
 
-        public SendGridEmailService(SendGridSettings settings) 
+        public SendGridEmailService(SendGridSettings settings)
         {
             this.settings = settings;
         }
@@ -22,7 +22,7 @@ namespace GenericMessagingService.Services.Email
         {
             var sendGridClient = new SendGridClient(new SendGridClientOptions
             {
-                ApiKey = this.settings.ApiKey
+                ApiKey = settings.ApiKey
             });
             var msg = new SendGridMessage
             {

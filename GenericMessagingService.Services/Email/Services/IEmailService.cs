@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GenericMessagingService.Services.Email
+namespace GenericMessagingService.Services.Email.Services
 {
     internal interface IEmailService
     {

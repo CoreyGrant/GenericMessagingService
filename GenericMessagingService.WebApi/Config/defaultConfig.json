@@ -1,7 +1,5 @@
 {
   "$schema": "../ConfigSchema/app-schema.json",
-  
-  // will try for razor templates, then default to database templates
   "email": {
     "overrideToAddress": "",
     "defaultFromAddress": "",
@@ -27,6 +25,7 @@
     // Will find User-defaultemail in the User\\Default folder, named Email
     // any other User-<any> in User, named <any>
     "razorTemplates": {
+      "baseFolder": "/",
       "fixed": {
         "ForgotPassword": "Auth\\ForgotPassword",
         "User-defaultemail": "User\\Default\\Email"

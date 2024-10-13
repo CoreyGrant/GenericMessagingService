@@ -11,6 +11,7 @@ namespace GenericMessagingService.Types.Config
         public string? OverrideToNumber { get; set; }
         public string? DefaultFromNumber { get; set; }
         public TwilioSettings Twilio { get; set; }
+        public FolderSettings Folder { get; set; }
     }
 
     public class TwilioSettings

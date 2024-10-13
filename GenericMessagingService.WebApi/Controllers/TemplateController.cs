@@ -1,4 +1,4 @@
-﻿using GenericMessagingService.Services.Templating;
+﻿using GenericMessagingService.Services.Templating.Services;
 using GenericMessagingService.Types.Shared;
 using GenericMessagingService.Types.Template;
 using Microsoft.AspNetCore.Http;

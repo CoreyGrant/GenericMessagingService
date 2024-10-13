@@ -9,11 +9,11 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace GenericMessagingService.Services.Templating
+namespace GenericMessagingService.Services.Templating.Services
 {
     public interface ITemplateService
     {
-        Task<TemplateResponse?> GetTemplate(TemplateRequest request);
+        Task<TemplateResponse> GetTemplate(TemplateRequest request);
     }
 
     internal class TemplateService : ITemplateService
@@ -27,7 +27,7 @@ namespace GenericMessagingService.Services.Templating
             templateService = templateStrategyResolver.Resolve(templateSettings.TemplateStrategy);
         }
 
-        public Task<TemplateResponse?> GetTemplate(TemplateRequest request)
+        public Task<TemplateResponse> GetTemplate(TemplateRequest request)
         {
             // determine the type of email template
             return templateService.GetTemplate(request);
