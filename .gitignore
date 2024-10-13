@@ -1,1 +1,13 @@
 .vs/
+
+GenericMessagingService.Client/bin/
+GenericMessagingService.WebApi/bin/
+GenericMessagingService.Services/bin/
+GenericMessagingService.Types/bin/
+
+GenericMessagingService.Client/obj/
+GenericMessagingService.WebApi/obj/
+GenericMessagingService.Services/obj/
+GenericMessagingService.Types/obj/
+
+

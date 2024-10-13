@@ -31,7 +31,10 @@ namespace GenericMessagingService.Services.Email
                 
             } else if(settings.SendGrid != null)
             {
-
+                return new SendGridEmailService(settings.SendGrid);
+            } else if(settings.Folder != null)
+            {
+                return new FolderEmailService(settings.Folder);
             }
             throw new Exception("Email client was not configured");
         }

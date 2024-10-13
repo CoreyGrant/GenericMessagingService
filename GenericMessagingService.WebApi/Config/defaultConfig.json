@@ -2,26 +2,33 @@
   //"overrideToAddress": "",
   //"defaultFromAddress": "",
   // will try for razor templates, then default to database templates
-  "templateStrategy": "razor|database",
-  "smtp": {
+  "email": {
+    "smtp": {
+
+    }
+  },
+  "sms": {
 
   },
-  "databaseTemplates": {
-    "connectionString": "",
-    "table": "",
-    "lookupColumn": "",
-    "templateColumn": "",
-    "subjectColumn": ""
-  },
-  // Will find User-defaultemail in the User\\Default folder, named Email
-  // any other User-<any> in User, named <any>
-  "razorTemplates": {
-    "fixed": {
-      "ForgotPassword": "Auth\\ForgotPassword",
-      "User-defaultemail": "User\\Default\\Email"
+  "template": {
+    "templateStrategy": "razor|database",
+    "databaseTemplates": {
+      "connectionString": "",
+      "table": "",
+      "lookupColumn": "",
+      "templateColumn": "",
+      "subjectColumn": ""
     },
-    "regex": {
-      "User-([a-zA-Z0-9]+)": "User\\{0}"
+    // Will find User-defaultemail in the User\\Default folder, named Email
+    // any other User-<any> in User, named <any>
+    "razorTemplates": {
+      "fixed": {
+        "ForgotPassword": "Auth\\ForgotPassword",
+        "User-defaultemail": "User\\Default\\Email"
+      },
+      "regex": {
+        "User-([a-zA-Z0-9]+)": "User\\{0}"
+      }
     }
   }
 }

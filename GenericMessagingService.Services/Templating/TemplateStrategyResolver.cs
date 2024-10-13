@@ -17,12 +17,12 @@ namespace GenericMessagingService.Services.Templating
 
     internal class TemplateStrategyResolver : ITemplateStrategyResolver
     {
-        private readonly EmailSettings settings;
+        private readonly TemplateSettings settings;
         private readonly IRazorEngine razorEngine;
         private readonly IDatabaseStrategyResolver databaseStrategyResolver;
 
         public TemplateStrategyResolver(
-            EmailSettings settings,
+            TemplateSettings settings,
             IRazorEngine razorEngine,
             IDatabaseStrategyResolver databaseStrategyResolver)
         {

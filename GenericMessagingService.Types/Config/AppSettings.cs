@@ -9,5 +9,7 @@ namespace GenericMessagingService.Types.Config
     public class AppSettings
     {
         public EmailSettings Email { get; set; }
+        public SmsSettings Sms { get; set; }
+        public TemplateSettings Template { get; set; }
     }
 }

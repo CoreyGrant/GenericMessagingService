@@ -1,13 +1,19 @@
-﻿using System.ComponentModel.Design;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System.ComponentModel.Design;
 
 namespace GenericMessagingService.Client
 {
     public static class ServiceContainer
     {
-        public static IServiceContainer AddMessagingClient(this IServiceContainer container)
+        public static IServiceCollection AddMessagingClient(
+            this IServiceCollection services,
+            ClientSettings settings)
         {
-
-            return container;
+            services.AddSingleton(settings);
+            services.AddTransient<IEmailClient, EmailClient>();
+            services.AddTransient<ISmsClient, SmsClient>();
+            services.AddTransient<ITemplateClient, TemplateClient>();
+            return services;
         }
     }
 }

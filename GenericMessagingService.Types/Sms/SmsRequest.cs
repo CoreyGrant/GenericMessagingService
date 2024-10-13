@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GenericMessagingService.Types.Email
+namespace GenericMessagingService.Types.Sms
 {
-    public class EmailRequest
+    public class SmsRequest
     {
         public string? Template { get; set; }
-        public string? Subject { get; set; }
         public string? TemplateName { get; set; }
         public List<string> To { get; set; }
         public string From { get; set; }

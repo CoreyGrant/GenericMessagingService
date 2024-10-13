@@ -1,7 +1,8 @@
-﻿using GenericMessagingService.Services.Email;
+﻿using GenericMessagingService.Services.Sms;
 using GenericMessagingService.Services.Templating;
 using GenericMessagingService.Types.Email;
 using GenericMessagingService.Types.Shared;
+using GenericMessagingService.Types.Sms;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,22 +10,21 @@ namespace GenericMessagingService.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EmailController : ControllerBase
+    public class SmsController : ControllerBase
     {
-        private readonly IEmailSenderService emailSenderService;
+        private readonly ISmsSenderService smsSenderService;
 
-        public EmailController(
-            IEmailSenderService emailSenderService)
+        public SmsController(ISmsSenderService smsSenderService)
         {
-            this.emailSenderService = emailSenderService;
+            this.smsSenderService = smsSenderService;
         }
 
         [HttpPost("/")]
-        public async Task<ApiResponse> SendEmail(EmailRequest emailRequest)
+        public async Task<ApiResponse> SendEmail(SmsRequest smsRequest)
         {
             try
             {
-                await this.emailSenderService.SendEmailAsync(emailRequest);
+                await this.smsSenderService.SendSmsAsync(smsRequest);
                 return new ApiResponse(true);
             }
             catch (Exception ex)

@@ -21,10 +21,10 @@ namespace GenericMessagingService.Services.Templating
         private ITemplateService templateService;
 
         public TemplateService(
-            EmailSettings emailSettings,
+            TemplateSettings templateSettings,
             ITemplateStrategyResolver templateStrategyResolver)
         {
-            templateService = templateStrategyResolver.Resolve(emailSettings.TemplateStrategy);
+            templateService = templateStrategyResolver.Resolve(templateSettings.TemplateStrategy);
         }
 
         public Task<TemplateResponse?> GetTemplate(TemplateRequest request)

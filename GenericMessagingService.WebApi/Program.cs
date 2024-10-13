@@ -1,8 +1,10 @@
 using GenericMessagingService.Services;
+using GenericMessagingService.WebApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddWebApi();
 builder.Services.AddMessagingServices();
 
 // Build the application

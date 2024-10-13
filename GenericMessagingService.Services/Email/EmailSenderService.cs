@@ -12,7 +12,7 @@ namespace GenericMessagingService.Services.Email
 {
     public interface IEmailSenderService
     {
-        Task SendEmailAsync<T>(EmailRequest<T> request) where T : class;
+        Task SendEmailAsync(EmailRequest request);
     }
 
     internal class EmailSenderService : IEmailSenderService
@@ -22,23 +22,23 @@ namespace GenericMessagingService.Services.Email
         private readonly IEmailService emailService;
 
         public EmailSenderService(
-                EmailSettings emailSettings,
-                ITemplateService templateService,
-                IEmailStrategyResolver emailServiceResolver)
+            EmailSettings emailSettings,
+            ITemplateService templateService,
+            IEmailStrategyResolver emailServiceResolver)
         {
             this.templateService = templateService;
             this.emailSettings = emailSettings;
             this.emailService = emailServiceResolver.Resolve();
         }
 
-        public async Task SendEmailAsync<T>(EmailRequest<T> request) where T : class
+        public async Task SendEmailAsync(EmailRequest request)
         {
             var template = request.Template;
             var subject = request.Subject;
             if (!string.IsNullOrEmpty(request.TemplateName))
             {
                 // request contains a template name, find template then populate with object
-                var tr = await this.templateService.GetTemplate(new TemplateRequest<T> { Data = request.Data, TemplateName = request.TemplateName });
+                var tr = await this.templateService.GetTemplate(new TemplateRequest { Data = request.Data, TemplateName = request.TemplateName });
                 template = tr.Body;
                 if (!string.IsNullOrEmpty(tr.Subject))
                 {
