@@ -1,6 +1,6 @@
-﻿using GenericMessagingService.Types.Email;
-using GenericMessagingService.Types.Shared;
+﻿using GenericMessagingService.Types.Shared;
 using GenericMessagingService.Types.Sms;
+using GenericMessagingService.Types.Template;
 using System;
 using System.Collections.Generic;
 using System.Linq;

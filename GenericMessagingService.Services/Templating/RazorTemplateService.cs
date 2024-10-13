@@ -1,5 +1,5 @@
 ﻿using GenericMessagingService.Types.Config;
-using GenericMessagingService.Types.Email;
+using GenericMessagingService.Types.Template;
 using RazorEngineCore;
 using System;
 using System.Collections.Generic;

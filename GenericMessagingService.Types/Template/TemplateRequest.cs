@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GenericMessagingService.Types.Email
+namespace GenericMessagingService.Types.Template
 {
     public class TemplateRequest
     {

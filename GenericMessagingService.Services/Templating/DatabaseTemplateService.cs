@@ -1,6 +1,6 @@
 ﻿using GenericMessagingService.Services.Templating.Database;
 using GenericMessagingService.Types.Config;
-using GenericMessagingService.Types.Email;
+using GenericMessagingService.Types.Template;
 using System;
 using System.Collections.Generic;
 using System.Linq;

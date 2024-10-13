@@ -1,6 +1,6 @@
 ﻿using GenericMessagingService.Services.Templating;
-using GenericMessagingService.Types.Email;
 using GenericMessagingService.Types.Shared;
+using GenericMessagingService.Types.Template;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
