@@ -1,14 +1,19 @@
 {
-  //"overrideToAddress": "",
-  //"defaultFromAddress": "",
+  "$schema": "../ConfigSchema/app-schema.json",
+  
   // will try for razor templates, then default to database templates
   "email": {
-    "smtp": {
-
+    "overrideToAddress": "",
+    "defaultFromAddress": "",
+    "folder": {
+      "folderPath": ""
     }
   },
   "sms": {
-
+    "twilio": {
+      "accountSid": "",
+      "authToken": ""
+    }
   },
   "template": {
     "templateStrategy": "razor|database",

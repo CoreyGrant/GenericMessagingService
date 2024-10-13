@@ -1,0 +1,122 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "title": "App settings",
+
+  "type": "object",
+
+  "properties": {
+    "email": {
+      "type": "object",
+      "description": "The email options",
+      "properties": {
+        "overrideToAddress": {
+          "type": "string"
+        },
+        "defaultFromAddress": {
+          "type": "string"
+        },
+        "smtp": {
+          "type": "object",
+          "properties": {
+
+          }
+        },
+        "mailChimp": {
+          "type": "object",
+          "properties": {
+
+          }
+        },
+        "sendGrid": {
+          "type": "object",
+          "properties": {
+            "apiKey": { "type": "string" }
+          },
+          "required": ["apiKey"]
+        },
+        "folder": {
+          "type": "object",
+          "properties": {
+            "folderPath": {
+              "type": "string"
+            }
+          },
+          "required": ["folderPath"]
+        }
+      },
+      "oneOf": [
+        { "required": [ "folder" ] },
+        { "required": [ "smtp" ] },
+        { "required": [ "sendGrid" ] },
+        { "required": [ "mailChimp" ] }
+      ]
+    },
+    "sms": {
+      "type": "object",
+      "description": "The sms options",
+      "properties": {
+        "overrideToNumber": {
+          "type": "string"
+        },
+        "defaultFromNumber": {
+          "type": "string"
+        },
+        "twilio": {
+          "type": "object",
+          "properties": {
+            "accountSid": {
+              "type": "string"
+            },
+            "authToken": {
+              "type": "string"
+            }
+          },
+          "required": [ "accountSid", "authToken" ]
+        }
+      }
+    },
+    "template": {
+      "properties": {
+        "templateStrategy": {
+          "type": "string"
+        },
+        "databaseTemplates": {
+          "type": "object",
+          "properties": {
+            "connectionString": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string"
+            },
+            "table": {
+              "type": "string"
+            },
+            "lookupColumn": {
+              "type": "string"
+            },
+            "templateColumn": {
+              "type": "string"
+            },
+            "subjectColumn": {
+              "type": "string"
+            }
+          },
+          "required": [ "connectionString", "table", "lookupColumn", "templateColumn" ]
+        },
+        "razorTemplates": {
+          "type": "object",
+          "properties": {
+            "baseFolder": { "type": "string" },
+            "fixed": { "type": "object" },
+            "regex": { "type": "object" }
+          }
+        }
+      },
+      "anyOf": [
+        { "required": [ "razorTemplates" ] },
+        { "required": [ "databaseTemplates" ] }
+      ]
+    }
+  }
+}
