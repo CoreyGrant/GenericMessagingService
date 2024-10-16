@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace GenericMessagingService.Services.Templating.Services.Formatting
 {
-    internal class RazorTemplateFormattingService : ITemplateFormattingService
+    public class RazorTemplateFormattingService : ITemplateFormattingService
     {
         private readonly RazorTemplateFormattingSettings settings;
         private readonly IRazorEngine engine;

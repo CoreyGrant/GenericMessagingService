@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GenericMessagingService.Services.Templating.Database
 {
-    internal class SqlServerService : IDatabaseService
+    public class SqlServerService : IDatabaseService
     {
         private readonly DatabaseTemplateLocationSettings settings;
 

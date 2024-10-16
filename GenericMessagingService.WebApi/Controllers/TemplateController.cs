@@ -24,7 +24,7 @@ namespace GenericMessagingService.WebApi.Controllers
             {
                 var result = await this.templateService.GetTemplate(request);
                 if (result == null) { return new ApiResponse<TemplateResponse>("Failed to find template"); }
-                return new ApiResponse<TemplateResponse>(result);
+                return new ApiResponse<TemplateResponse>(new TemplateResponse { Body = result.Value.Body, Subject = result.Value.Subject});
             }
             catch (Exception ex)
             {

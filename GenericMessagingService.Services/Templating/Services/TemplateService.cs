@@ -11,7 +11,7 @@ namespace GenericMessagingService.Services.Templating.Services
         Task<(string Body, string? Subject)?> GetTemplate(TemplateRequest request);
     }
 
-    internal class TemplateService : ITemplateService
+    public class TemplateService : ITemplateService
     {
         private readonly TemplateSettings templateSettings;
         private readonly ITemplateFormattingService templateFormattingService;
@@ -23,8 +23,8 @@ namespace GenericMessagingService.Services.Templating.Services
             ITemplateLocationServiceResolver templateLocationServiceResolver)
         {
             this.templateSettings = templateSettings;
-            this.templateFormattingService = templateFormattingServiceResolver.Resolve();
-            this.templateLocationService = templateLocationServiceResolver.Resolve();
+            this.templateFormattingService = templateFormattingServiceResolver.Resolve(templateSettings.Formatting);
+            this.templateLocationService = templateLocationServiceResolver.Resolve(templateSettings.Location);
         }
 
         public async Task<(string Body, string? Subject)?> GetTemplate(TemplateRequest request)
@@ -35,7 +35,30 @@ namespace GenericMessagingService.Services.Templating.Services
                 return null;
             }
             var body = await templateFormattingService.FormatTemplate(template, request.Data);
+            subject = await templateFormattingService.FormatTemplate(subject, request.Data);
             return (body, subject);
+        }
+    }
+
+    public interface ITemplateServiceFactory
+    {
+        ITemplateService CreateTemplateService(TemplateSettings templateSettings);
+    }
+
+    public class TemplateServiceFactory : ITemplateServiceFactory
+    {
+        private readonly ITemplateLocationServiceResolver templateLocationServiceResolver;
+        private readonly ITemplateFormattingServiceResolver templateFormattingServiceResolver;
+
+        public TemplateServiceFactory(ITemplateLocationServiceResolver templateLocationServiceResolver,
+            ITemplateFormattingServiceResolver templateFormattingServiceResolver)
+        {
+            this.templateLocationServiceResolver = templateLocationServiceResolver;
+            this.templateFormattingServiceResolver = templateFormattingServiceResolver;
+        }
+        public ITemplateService CreateTemplateService(TemplateSettings templateSettings)
+        {
+            return new TemplateService(templateSettings, templateFormattingServiceResolver, templateLocationServiceResolver);
         }
     }
 }

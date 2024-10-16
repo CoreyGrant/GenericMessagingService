@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GenericMessagingService.Services.Templating.Services.Formatting
 {
-    internal interface ITemplateFormattingService
+    public interface ITemplateFormattingService
     {
         Task<string> FormatTemplate(string template, IDictionary<string, string> data);
     }

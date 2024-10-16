@@ -10,15 +10,14 @@ using System.Threading.Tasks;
 
 namespace GenericMessagingService.Services.Templating.Services
 {
-    internal class ComboTemplateService : ITemplateService
+    public class ComboTemplateService : ITemplateService
     {
         private readonly ComboTemplateSettings settings;
         private readonly List<ITemplateService> templateServices;
 
         public ComboTemplateService(
             ComboTemplateSettings settings,
-            ITemplateFormattingServiceResolver templateFormattingServiceResolver,
-            ITemplateLocationServiceResolver templateLocationServiceResolver)
+            ITemplateServiceFactory templateServiceFactory)
         {
             this.settings = settings;
             this.templateServices = new List<ITemplateService>();
@@ -26,10 +25,7 @@ namespace GenericMessagingService.Services.Templating.Services
             foreach(var strategyPart in strategyParts)
             {
                 var config = settings.Combo[strategyPart];
-                this.templateServices.Add(new TemplateService(
-                    config,
-                    templateFormattingServiceResolver,
-                    templateLocationServiceResolver));
+                this.templateServices.Add(templateServiceFactory.CreateTemplateService(config));
             }
         }
 
@@ -44,6 +40,25 @@ namespace GenericMessagingService.Services.Templating.Services
                 }
             }
             throw new Exception("Failed to get template from combo config");
+        }
+    }
+
+    public interface IComboTemplateServiceFactory
+    {
+        ITemplateService CreateComboTemplateService(ComboTemplateSettings settings);
+    }
+
+    public class ComboTemplateServiceFactory : IComboTemplateServiceFactory
+    {
+        private readonly ITemplateServiceFactory templateServiceFactory;
+
+        public ComboTemplateServiceFactory(ITemplateServiceFactory templateServiceFactory) 
+        {
+            this.templateServiceFactory = templateServiceFactory;
+        }
+        public ITemplateService CreateComboTemplateService(ComboTemplateSettings settings)
+        {
+            return new ComboTemplateService(settings, templateServiceFactory);
         }
     }
 }

@@ -1,6 +1,6 @@
 {
-  "$schema": "http://json-schema.org/draft-04/schema",
-  "$id": "file:///path/template-schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "file:///ConfigSchema/template-schema.json",
   "type": "object",
   "properties": {
     "templateStrategy": {

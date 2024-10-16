@@ -1,4 +1,5 @@
 ﻿using GenericMessagingService.Services.Templating.Database;
+using GenericMessagingService.Services.Utils;
 using GenericMessagingService.Types.Config;
 using System;
 using System.Collections.Generic;
@@ -8,25 +9,25 @@ using System.Threading.Tasks;
 
 namespace GenericMessagingService.Services.Templating.Services.Location
 {
-    internal interface ITemplateLocationServiceResolver
+    public interface ITemplateLocationServiceResolver
     {
-        ITemplateLocationService Resolve();
+        ITemplateLocationService Resolve(TemplateLocationSettings settings);
     }
 
-    internal class TemplateLocationServiceResolver : ITemplateLocationServiceResolver
+    public class TemplateLocationServiceResolver : ITemplateLocationServiceResolver
     {
-        private readonly TemplateLocationSettings settings;
         private readonly IDatabaseStrategyResolver databaseStrategyResolver;
+        private readonly IFileManager fileManager;
 
         public TemplateLocationServiceResolver(
-            TemplateLocationSettings settings,
-            IDatabaseStrategyResolver databaseStrategyResolver)
+            IDatabaseStrategyResolver databaseStrategyResolver,
+            IFileManager fileManager)
         {
-            this.settings = settings;
             this.databaseStrategyResolver = databaseStrategyResolver;
+            this.fileManager = fileManager;
         }
 
-        public ITemplateLocationService Resolve()
+        public ITemplateLocationService Resolve(TemplateLocationSettings settings)
         {
             var database = settings.Database;
             var folder = settings.Folder;
@@ -41,7 +42,7 @@ namespace GenericMessagingService.Services.Templating.Services.Location
                         services.Add(new DatabaseTemplateLocationService(database, databaseStrategyResolver));
                     } else if(strategyPart == "folder")
                     {
-                        services.Add(new FolderTemplateLocationService(folder));
+                        services.Add(new FolderTemplateLocationService(folder, fileManager));
                     }
                 }
                 return new ComboTemplateLocationService(services);
@@ -53,36 +54,36 @@ namespace GenericMessagingService.Services.Templating.Services.Location
                 }
                 else if (folder != null)
                 {
-                    return new FolderTemplateLocationService(folder);
+                    return new FolderTemplateLocationService(folder, fileManager);
                 }
             }
             
             throw new Exception("No template location option specified");
         }
+    }
 
-        private class ComboTemplateLocationService : ITemplateLocationService
+    public class ComboTemplateLocationService : ITemplateLocationService
+    {
+        private readonly IEnumerable<ITemplateLocationService> services;
+
+        public ComboTemplateLocationService(IEnumerable<ITemplateLocationService> services)
         {
-            private readonly IEnumerable<ITemplateLocationService> services;
+            this.services = services;
+        }
 
-            public ComboTemplateLocationService(IEnumerable<ITemplateLocationService> services)
+        public async Task<(string, string)> LocateTemplateAsync(string templateName)
+        {
+            foreach (var service in services)
             {
-                this.services = services;
-            }
-
-            public async Task<(string, string)> LocateTemplateAsync(string templateName)
-            {
-                foreach(var service in services)
+                var (body, subject) = await service.LocateTemplateAsync(templateName);
+                if (body != null)
                 {
-                    var (body, subject) = await service.LocateTemplateAsync(templateName);
-                    if(body != null)
-                    {
-                        return (body, subject);
-                    }
+                    return (body, subject);
                 }
-                return (null, null);
             }
+            return (null, null);
         }
     }
 
-    
+
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GenericMessagingService.Services.Templating.Database
 {
-    internal interface IDatabaseService
+    public interface IDatabaseService
     {
         Task<(string Template, string? Subject)?> GetTemplate(string templateName);
     }

@@ -1,4 +1,5 @@
-﻿using GenericMessagingService.Types.Config;
+﻿using GenericMessagingService.Services.Utils;
+using GenericMessagingService.Types.Config;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,12 +13,14 @@ namespace GenericMessagingService.Services.Templating.Services.Location
     public class FolderTemplateLocationService : ITemplateLocationService
     {
         private readonly FolderTemplateLocationSettings settings;
+        private readonly IFileManager fileManager;
         private Dictionary<string, Regex> regexCache;
 
-        public FolderTemplateLocationService(FolderTemplateLocationSettings settings) 
+        public FolderTemplateLocationService(FolderTemplateLocationSettings settings, IFileManager fileManager) 
         {
             this.settings = settings;
-            regexCache = this.settings.Regex.ToDictionary(x => x.Key, x => new Regex(x.Key));
+            this.fileManager = fileManager;
+            regexCache = this.settings.Regex?.ToDictionary(x => x.Key, x => new Regex(x.Key, RegexOptions.Compiled)) ?? new Dictionary<string, Regex>();
         }
 
         public async Task<(string?, string?)> LocateTemplateAsync(string templateName)
@@ -25,26 +28,26 @@ namespace GenericMessagingService.Services.Templating.Services.Location
             if (TryMatchName(templateName, out var path)) 
             {
                 var fileName = Path.Combine(settings.BaseFolder, path);
-                return (await File.ReadAllTextAsync(fileName), null);
+                return (await fileManager.GetFileAsync(fileName), null);
             }
             return (null, null);
         }
 
         private bool TryMatchName(string templateName, out string location)
         {
-            if (settings.Fixed.ContainsKey(templateName))
+            if (settings.Fixed?.ContainsKey(templateName) ?? false)
             {
-                location = settings.Fixed[templateName];
+                location = settings.Fixed[templateName] + ".razor";
                 return true;
             }
-            foreach (var (k, v) in settings.Regex)
+            foreach (var (k, v) in settings.Regex ?? new Dictionary<string, string>())
             {
                 var regex = regexCache[k];
                 var regexResult = regex.Match(templateName);
                 if (regexResult.Success)
                 {
-                    var matches = regexResult.Captures.Select(x => x.Value);
-                    location = string.Format(v, matches);
+                    var matches = regexResult.Groups.Cast<Group>().Skip(1).Select(x => x.Value).ToArray();
+                    location = string.Format(v, matches) + ".razor";
                     return true;
                 }
             }

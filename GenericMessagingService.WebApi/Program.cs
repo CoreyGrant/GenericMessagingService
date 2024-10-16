@@ -5,7 +5,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddWebApi();
-builder.Services.AddMessagingServices();
 
 // Build the application
 var app = builder.Build();

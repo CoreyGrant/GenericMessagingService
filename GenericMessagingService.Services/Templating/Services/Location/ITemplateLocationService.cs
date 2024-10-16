@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GenericMessagingService.Services.Templating.Services.Location
 {
-    internal interface ITemplateLocationService
+    public interface ITemplateLocationService
     {
         Task<(string?, string?)> LocateTemplateAsync(string templateName);
     }

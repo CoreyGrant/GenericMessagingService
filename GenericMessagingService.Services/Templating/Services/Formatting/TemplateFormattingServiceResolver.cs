@@ -8,25 +8,22 @@ using System.Threading.Tasks;
 
 namespace GenericMessagingService.Services.Templating.Services.Formatting
 {
-    internal interface ITemplateFormattingServiceResolver
+    public interface ITemplateFormattingServiceResolver
     {
-        ITemplateFormattingService Resolve();
+        ITemplateFormattingService Resolve(TemplateFormattingSettings settings);
     }
 
-    internal class TemplateFormattingServiceResolver : ITemplateFormattingServiceResolver
+    public class TemplateFormattingServiceResolver : ITemplateFormattingServiceResolver
     {
-        private readonly TemplateFormattingSettings settings;
         private readonly IRazorEngine razorEngine;
 
         public TemplateFormattingServiceResolver(
-            TemplateFormattingSettings settings,
             IRazorEngine razorEngine)
         {
-            this.settings = settings;
             this.razorEngine = razorEngine;
         }
 
-        public ITemplateFormattingService Resolve()
+        public ITemplateFormattingService Resolve(TemplateFormattingSettings settings)
         {
             var razor = settings.Razor;
             var basic = settings.Basic;

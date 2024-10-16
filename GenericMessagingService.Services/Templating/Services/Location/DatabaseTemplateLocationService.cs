@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GenericMessagingService.Services.Templating.Services.Location
 {
-    internal class DatabaseTemplateLocationService : ITemplateLocationService
+    public class DatabaseTemplateLocationService : ITemplateLocationService
     {
         private readonly DatabaseTemplateLocationSettings settings;
         private readonly IDatabaseService databaseService;

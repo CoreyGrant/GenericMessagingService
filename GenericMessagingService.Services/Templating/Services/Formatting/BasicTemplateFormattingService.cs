@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GenericMessagingService.Services.Templating.Services.Formatting
 {
-    internal class BasicTemplateFormattingService : ITemplateFormattingService
+    public class BasicTemplateFormattingService : ITemplateFormattingService
     {
         public async Task<string> FormatTemplate(string template, IDictionary<string, string> data)
         {

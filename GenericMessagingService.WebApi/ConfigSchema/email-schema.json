@@ -1,6 +1,6 @@
 {
-  "$schema": "http://json-schema.org/draft-04/schema",
-  "$id": "file:///email-schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "file:///ConfigSchema/email-schema.json",
   "type": "object",
   "description": "The email options",
   "properties": {

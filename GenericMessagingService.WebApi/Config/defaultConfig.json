@@ -14,24 +14,33 @@
     }
   },
   "comboTemplate": {
-    "strategy": "razor|database",
-    "databaseTemplates": {
-      "connectionString": "",
-      "table": "",
-      "lookupColumn": "",
-      "templateColumn": "",
-      "subjectColumn": ""
-    },
-    // Will find User-defaultemail in the User\\Default folder, named Email
-    // any other User-<any> in User, named <any>
-    "razorTemplates": {
-      "baseFolder": "/",
-      "fixed": {
-        "ForgotPassword": "Auth\\ForgotPassword",
-        "User-defaultemail": "User\\Default\\Email"
+    "strategy": "new|legacy",
+    "combo": {
+      "new": {
+        "location": {
+          "folder": {
+            "baseFolder": "",
+            "fixed": {},
+            "regex": {}
+          }
+        },
+        "formatting": {
+          "razor": {}
+        }
       },
-      "regex": {
-        "User-([a-zA-Z0-9]+)": "User\\{0}"
+      "legacy": {
+        "location": {
+          "database": {
+            "table": "",
+            "connectionString": "",
+            "lookupColumn": "",
+            "templateColumn": "",
+            "subjectColumn": ""
+          }
+        },
+        "formatting": {
+          "basic": {}
+        }
       }
     }
   }

@@ -1,4 +1,5 @@
-﻿using GenericMessagingService.Types.Config;
+﻿using GenericMessagingService.Services;
+using GenericMessagingService.Types.Config;
 using Newtonsoft.Json;
 
 namespace GenericMessagingService.WebApi
@@ -13,8 +14,8 @@ namespace GenericMessagingService.WebApi
             services.AddSingleton(appSettings.Email);
             services.AddSingleton(appSettings.Sms);
             services.AddSingleton(appSettings.Template);
-            services.AddSingleton(appSettings.Template?.DatabaseTemplates ?? new DatabaseTemplateSettings());
-            services.AddSingleton(appSettings.Template?.RazorTemplates ?? new RazorTemplateSettings());
+            services.AddSingleton(appSettings.ComboTemplate);
+            services.AddMessagingServices();
             return services;
         }
     }

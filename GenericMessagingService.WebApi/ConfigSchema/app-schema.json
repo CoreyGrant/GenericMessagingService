@@ -1,22 +1,172 @@
 {
-  "$schema": "http://json-schema.org/draft-04/schema",
-  "$id": "file:///app-schema.json",
-  "title": "App settings",
-
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
-
   "properties": {
     "email": {
-      "$ref": "../email-schema.json"
+      "$ref": "#/$defs/email"
     },
     "sms": {
-      "$ref": "../sms-schema.json"
+      "$ref": "#/$defs/sms"
     },
     "template": {
-      "$ref": "../template-schema.json"
+      "$ref": "#/$defs/template"
     },
     "comboTemplate": {
-      "$ref": "./combo-template-schema.json"
+      "$ref": "#/$defs/comboTemplate"
+    }
+  },
+  "$defs": {
+    "sms": {
+      "type": "object",
+      "description": "The sms options",
+      "properties": {
+        "overrideToNumber": {
+          "type": "string"
+        },
+        "defaultFromNumber": {
+          "type": "string"
+        },
+        "twilio": {
+          "type": "object",
+          "properties": {
+            "accountSid": {
+              "type": "string"
+            },
+            "authToken": {
+              "type": "string"
+            }
+          },
+          "required": [ "accountSid", "authToken" ]
+        },
+        "folder": {
+          "$ref": "#/$defs/folder"
+        }
+      },
+      "oneOf": [
+        { "required": [ "twilio" ] },
+        { "required": [ "folder" ] }
+      ]
+    },
+    "email": {
+      "type": "object",
+      "description": "The email options",
+      "properties": {
+        "overrideToAddress": {
+          "type": "string"
+        },
+        "defaultFromAddress": {
+          "type": "string"
+        },
+        "smtp": {
+          "type": "object",
+          "properties": {
+
+          }
+        },
+        "mailChimp": {
+          "type": "object",
+          "properties": {
+
+          }
+        },
+        "sendGrid": {
+          "type": "object",
+          "properties": {
+            "apiKey": { "type": "string" }
+          },
+          "required": [ "apiKey" ]
+        },
+        "folder": {
+          "$ref": "#/$defs/folder"
+        }
+      },
+      "oneOf": [
+        { "required": [ "folder" ] },
+        { "required": [ "smtp" ] },
+        { "required": [ "sendGrid" ] },
+        { "required": [ "mailChimp" ] }
+      ]
+    },
+    "template": {
+      "type": "object",
+      "properties": {
+        "location": {
+          "properties": {
+            "strategy":{
+              "type": "string"
+            },
+            "database": {
+              "type": "object",
+              "properties": {
+                "connectionString": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                },
+                "table": {
+                  "type": "string"
+                },
+                "lookupColumn": {
+                  "type": "string"
+                },
+                "templateColumn": {
+                  "type": "string"
+                },
+                "subjectColumn": {
+                  "type": "string"
+                }
+              },
+              "required": [ "connectionString", "table", "lookupColumn", "templateColumn" ]
+            },
+            "folder": {
+              "type": "object",
+              "properties": {
+                "baseFolder": { "type": "string" },
+                "fixed": { "type": "object" },
+                "regex": { "type": "object" }
+              },
+              "required": ["baseFolder", "fixed", "regex"]
+            }
+          },
+          "additionalProperties": false
+        },
+        "formatting": {
+          "properties": {
+            "razor": {
+              "type": "object"
+            },
+            "basic": {
+              "type": "object"
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    "comboTemplate": {
+      "type": "object",
+      "properties": {
+        "strategy": {
+          "type": "string"
+        },
+        "combo": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/template"
+          }
+        }
+      },
+      "required": [ "strategy", "combo" ]
+    },
+    "folder": {
+      "type": "object",
+      "properties": {
+        "folderPath": {
+          "type": "string"
+        }
+      },
+      "required": [ "folderPath" ]
     }
   }
 }

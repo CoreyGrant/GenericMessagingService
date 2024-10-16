@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GenericMessagingService.Services.Templating.Database
 {
-    internal interface IDatabaseStrategyResolver
+    public interface IDatabaseStrategyResolver
     {
         IDatabaseService Resolve(string? type);
     }
@@ -15,11 +15,11 @@ namespace GenericMessagingService.Services.Templating.Database
     /// <summary>
     /// Different databases can be configured
     /// </summary>
-    internal class DatabaseStrategyResolver : IDatabaseStrategyResolver
+    public class DatabaseStrategyResolver : IDatabaseStrategyResolver
     {
-        private readonly TemplateSettings settings;
+        private readonly DatabaseTemplateLocationSettings settings;
 
-        public DatabaseStrategyResolver(TemplateSettings settings) 
+        public DatabaseStrategyResolver(DatabaseTemplateLocationSettings settings) 
         {
             this.settings = settings;
         }
@@ -28,7 +28,7 @@ namespace GenericMessagingService.Services.Templating.Database
         {
             if(!string.IsNullOrEmpty(type) || type.ToLower() == "sqlserver")
             {
-                return new SqlServerService(settings.DatabaseTemplates);
+                return new SqlServerService(settings);
             }
             throw new Exception("Could not resolve database of type: " + type);
         }

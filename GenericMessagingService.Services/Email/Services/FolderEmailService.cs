@@ -1,4 +1,5 @@
-﻿using GenericMessagingService.Types.Config;
+﻿using GenericMessagingService.Services.Utils;
+using GenericMessagingService.Types.Config;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -12,17 +13,19 @@ namespace GenericMessagingService.Services.Email.Services
     internal class FolderEmailService : IEmailService
     {
         private readonly FolderSettings settings;
+        private readonly IFileManager fileManager;
 
-        public FolderEmailService(FolderSettings settings)
+        public FolderEmailService(FolderSettings settings, IFileManager fileManager)
         {
             this.settings = settings;
+            this.fileManager = fileManager;
         }
         public async Task SendEmailAsync(string subject, string body, IEnumerable<string> to, string from)
         {
             var fileName = Guid.NewGuid().ToString() + ".msg";
             using (var email = new MsgKit.Email(
-                new MsgKit.Sender(from, ""),
-                new MsgKit.Representing("", ""),
+                new MsgKit.Sender(from, from),
+                new MsgKit.Representing(from, from),
                 subject))
             {
                 email.Subject = subject;
@@ -37,9 +40,12 @@ namespace GenericMessagingService.Services.Email.Services
                     {
                         email.Recipients.AddBcc(toAddress);
                     }
-                    
                 }
-                email.Save(fileName);
+                using(var stream = fileManager.OpenWrite(fileName))
+                {
+                    email.Save(stream);
+                }
+                
             }
         }
 
@@ -52,14 +58,17 @@ namespace GenericMessagingService.Services.Email.Services
                 {
                     var fileName = Guid.NewGuid().ToString() + ".msg";
                     using (var email = new MsgKit.Email(
-                    new MsgKit.Sender(from, ""),
-                    new MsgKit.Representing("", ""),
+                    new MsgKit.Sender(from, from),
+                    new MsgKit.Representing(from, from),
                     subject))
                     {
                         email.Subject = subject;
                         email.BodyHtml = body;
                         email.Recipients.AddTo(to);
-                        email.Save(fileName);
+                        using (var stream = fileManager.OpenWrite(fileName))
+                        {
+                            email.Save(stream);
+                        }
                     }
                 });
                 tasks.Add(task);

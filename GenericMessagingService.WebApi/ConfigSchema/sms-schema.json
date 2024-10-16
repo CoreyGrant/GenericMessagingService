@@ -1,6 +1,6 @@
 {
-  "$schema": "http://json-schema.org/draft-04/schema",
-  "$id": "file:///sms-schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "file:///ConfigSchema/sms-schema.json",
   "type": "object",
   "description": "The sms options",
   "properties": {
