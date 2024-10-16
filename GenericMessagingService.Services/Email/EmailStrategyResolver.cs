@@ -1,5 +1,6 @@
 ﻿using GenericMessagingService.Services.Email.Services;
 using GenericMessagingService.Types.Config;
+using SendGrid;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,10 +17,17 @@ namespace GenericMessagingService.Services.Email
     internal class EmailStrategyResolver : IEmailStrategyResolver
     {
         private readonly EmailSettings settings;
+        private readonly ISendGridClient sendGridClient;
 
-        public EmailStrategyResolver(EmailSettings settings) 
+        private SendGridEmailService sendGridEmailService;
+        private FolderEmailService folderEmailService;
+
+        public EmailStrategyResolver(
+            EmailSettings settings,
+            ISendGridClient sendGridClient) 
         {
             this.settings = settings;
+            this.sendGridClient = sendGridClient;
         }
 
         public IEmailService Resolve() 
@@ -32,10 +40,10 @@ namespace GenericMessagingService.Services.Email
                 
             } else if(settings.SendGrid != null)
             {
-                return new SendGridEmailService(settings.SendGrid);
+                return sendGridEmailService ??= new SendGridEmailService(settings.SendGrid, sendGridClient);
             } else if(settings.Folder != null)
             {
-                return new FolderEmailService(settings.Folder);
+                return folderEmailService ??= new FolderEmailService(settings.Folder);
             }
             throw new Exception("Email client was not configured");
         }

@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "$id": "file:///path/combo-template-schema.json",
+  "type": "object",
+  "properties": {
+    "strategy": {
+      "type": "string"
+    },
+    "combo": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "../template-schema.json"
+      }
+    }
+  },
+  "required": [ "strategy", "combo" ]
+}

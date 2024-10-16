@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "$id": "file:///sms-schema.json",
+  "type": "object",
+  "description": "The sms options",
+  "properties": {
+    "overrideToNumber": {
+      "type": "string"
+    },
+    "defaultFromNumber": {
+      "type": "string"
+    },
+    "twilio": {
+      "type": "object",
+      "properties": {
+        "accountSid": {
+          "type": "string"
+        },
+        "authToken": {
+          "type": "string"
+        }
+      },
+      "required": [ "accountSid", "authToken" ]
+    },
+    "folder": {
+      "type": "object",
+      "properties": {
+        "folderPath": {
+          "type": "string"
+        }
+      },
+      "required": [ "folderPath" ]
+    }
+  },
+  "oneOf": [
+    { "required": [ "twilio" ] },
+    { "required": [ "folder" ] }
+  ]
+}

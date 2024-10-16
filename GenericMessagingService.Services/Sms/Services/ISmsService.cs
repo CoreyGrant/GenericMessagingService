@@ -9,5 +9,6 @@ namespace GenericMessagingService.Services.Sms.Services
     public interface ISmsService
     {
         Task SendSms(string message, IEnumerable<string> to, string from);
+        Task SendSms(Dictionary<string, string> toMessages, string from);
     }
 }

@@ -4,14 +4,21 @@ The idea is that any project which wants an email/text/notification microservice
 
 Email:
 	Emails should be handled via an endpoint which specifies a template, and some data
-	Templates should support a multitude of types
-		Database: Template strings live in a database table, where the database/table/columns are specified in config.
-		Razor: Templates live in a folder structure in the Razor format
-	These templates should have sensible defaults, with mixing of types (as a project may use database currently, but we want to migrate to Razor Templates)
 	Different email sending strategies should be supported, direct SMTP service, SendGrid etc
 
 SMS:
-	SMS will happen using twillio, with basic templating
+	SMS will happen using twillio, with templating
 
 Push Notification:
-	Should support android/ios, using whatever services are needed
+	Should support android/ios, using whatever services are 
+
+Templating:
+	Two seperate parts
+	The templates should be able to be stored in multiple places
+		- database
+		- folder structure
+		- remote file store
+	The tmeplates should support multiple formats
+		- basic string format
+		- razor
+		- handlebars

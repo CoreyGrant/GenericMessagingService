@@ -6,14 +6,48 @@ using System.Threading.Tasks;
 
 namespace GenericMessagingService.Types.Config
 {
-    public class TemplateSettings
+    public class ComboTemplateSettings
     {
-        public string? TemplateStrategy { get; set; }
-        public DatabaseTemplateSettings? DatabaseTemplates { get; set; }
-        public RazorTemplateSettings? RazorTemplates { get; set; }
+        public string Strategy { get; set; }
+        public Dictionary<string, TemplateSettings> Combo { get; set; }
     }
 
-    public class DatabaseTemplateSettings
+    public class TemplateSettings
+    {
+        public TemplateLocationSettings Location { get; set; }
+        public TemplateFormattingSettings Formatting { get; set; }
+    }
+
+    public class TemplateLocationSettings
+    {
+        public string? Strategy { get; set; }
+        public FolderTemplateLocationSettings? Folder { get; set; }
+        public RemoteTemplateLocationSettings? Remote { get; set; }
+        public DatabaseTemplateLocationSettings? Database { get; set; }
+    }
+
+    #region Location
+
+    public class FolderTemplateLocationSettings
+    {
+        public string? BaseFolder { get; set; }
+        /// <summary>
+        /// A mapping from template name to folder location. Checked before regex.
+        /// </summary>
+        public Dictionary<string, string> Fixed { get; set; }
+
+        /// <summary>
+        /// A mapping from template name to folder location, using regex with match groups for the tempate name, and a format string for the folder location
+        /// </summary>
+        public Dictionary<string, string> Regex { get; set; }
+    }
+
+    public class RemoteTemplateLocationSettings
+    {
+
+    }
+
+    public class DatabaseTemplateLocationSettings
     {
         public string ConnectionString { get; set; }
         /// <summary>
@@ -27,17 +61,30 @@ namespace GenericMessagingService.Types.Config
         public string? SubjectColumn { get; set; }
     }
 
-    public class RazorTemplateSettings
-    {
-        public string? BaseFolder { get; set; }
-        /// <summary>
-        /// A mapping from template name to folder location. Checked before regex.
-        /// </summary>
-        public Dictionary<string, string> Fixed { get; set; }
+    #endregion
 
-        /// <summary>
-        /// A mapping from template name to folder location, using regex with match groups for the tempate name, and a format string for the folder location
-        /// </summary>
-        public Dictionary<string, string> Regex { get; set; }
+    #region Formatting
+
+    public class TemplateFormattingSettings
+    {
+        public RazorTemplateFormattingSettings? Razor { get; set; }
+        public BasicTemplateFormattingSettings? Basic { get; set; }
+        public HandlebarsTemplateFormattingSettings? Handlebars { get; set; }
     }
+
+    public class RazorTemplateFormattingSettings
+    {
+    }
+
+    public class HandlebarsTemplateFormattingSettings
+    {
+
+    }
+
+    public class BasicTemplateFormattingSettings
+    {
+
+    }
+
+    #endregion
 }

@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "$id": "file:///email-schema.json",
+  "type": "object",
+  "description": "The email options",
+  "properties": {
+    "overrideToAddress": {
+      "type": "string"
+    },
+    "defaultFromAddress": {
+      "type": "string"
+    },
+    "smtp": {
+      "type": "object",
+      "properties": {
+
+      }
+    },
+    "mailChimp": {
+      "type": "object",
+      "properties": {
+
+      }
+    },
+    "sendGrid": {
+      "type": "object",
+      "properties": {
+        "apiKey": { "type": "string" }
+      },
+      "required": [ "apiKey" ]
+    },
+    "folder": {
+      "type": "object",
+      "properties": {
+        "folderPath": {
+          "type": "string"
+        }
+      },
+      "required": [ "folderPath" ]
+    }
+  },
+  "oneOf": [
+    { "required": [ "folder" ] },
+    { "required": [ "smtp" ] },
+    { "required": [ "sendGrid" ] },
+    { "required": [ "mailChimp" ] }
+  ]
+}

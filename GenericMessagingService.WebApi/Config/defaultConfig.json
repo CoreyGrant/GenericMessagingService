@@ -13,8 +13,8 @@
       "authToken": ""
     }
   },
-  "template": {
-    "templateStrategy": "razor|database",
+  "comboTemplate": {
+    "strategy": "razor|database",
     "databaseTemplates": {
       "connectionString": "",
       "table": "",

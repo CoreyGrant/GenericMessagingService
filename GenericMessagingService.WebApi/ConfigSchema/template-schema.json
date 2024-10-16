@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "$id": "file:///path/template-schema.json",
+  "type": "object",
+  "properties": {
+    "templateStrategy": {
+      "type": "string"
+    },
+    "databaseTemplates": {
+      "type": "object",
+      "properties": {
+        "connectionString": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "table": {
+          "type": "string"
+        },
+        "lookupColumn": {
+          "type": "string"
+        },
+        "templateColumn": {
+          "type": "string"
+        },
+        "subjectColumn": {
+          "type": "string"
+        }
+      },
+      "required": [ "connectionString", "table", "lookupColumn", "templateColumn" ]
+    },
+    "razorTemplates": {
+      "type": "object",
+      "properties": {
+        "baseFolder": { "type": "string" },
+        "fixed": { "type": "object" },
+        "regex": { "type": "object" }
+      }
+    }
+  },
+  "anyOf": [
+    { "required": [ "razorTemplates" ] },
+    { "required": [ "databaseTemplates" ] }
+  ]
+}

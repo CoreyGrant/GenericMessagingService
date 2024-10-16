@@ -3,11 +3,7 @@ using GenericMessagingService.Services.Templating.Services;
 using GenericMessagingService.Types.Config;
 using GenericMessagingService.Types.Email;
 using GenericMessagingService.Types.Template;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net.Mail;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace GenericMessagingService.Services.Email

@@ -17,6 +17,9 @@ namespace GenericMessagingService.Services.Sms
     {
         private readonly SmsSettings smsSettings;
 
+        private FolderSmsService folderSmsService;
+        private TwilioService twilioService;
+
         public SmsStrategyResolver(SmsSettings smsSettings)
         {
             this.smsSettings = smsSettings;
@@ -26,11 +29,11 @@ namespace GenericMessagingService.Services.Sms
         {
             if (smsSettings.Folder != null)
             {
-                return new FolderSmsService(smsSettings.Folder);
+                return folderSmsService ??= new FolderSmsService(smsSettings.Folder);
             }
             else
             {
-                return new TwilioService(smsSettings.Twilio);
+                return twilioService ??= new TwilioService(smsSettings.Twilio);
             }
         }
     }

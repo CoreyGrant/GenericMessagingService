@@ -8,6 +8,6 @@ namespace GenericMessagingService.Services.Templating.Database
 {
     internal interface IDatabaseService
     {
-        Task<(string Template, string Subject)?> GetTemplate(string templateName);
+        Task<(string Template, string? Subject)?> GetTemplate(string templateName);
     }
 }

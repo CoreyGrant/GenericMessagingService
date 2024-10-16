@@ -1,4 +1,5 @@
-﻿using GenericMessagingService.Types.Shared;
+﻿using GenericMessagingService.Client.Utils;
+using GenericMessagingService.Types.Shared;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -16,10 +17,12 @@ namespace GenericMessagingService.Client
     internal abstract class BaseClient : IBaseClient
     {
         private readonly ClientSettings settings;
+        protected readonly IClassToDictionaryConverter converter;
 
-        public BaseClient(ClientSettings settings)
+        public BaseClient(ClientSettings settings, IClassToDictionaryConverter converter)
         {
             this.settings = settings;
+            this.converter = converter;
         }
 
         protected async Task<T> Get<T>(string url) where T : class

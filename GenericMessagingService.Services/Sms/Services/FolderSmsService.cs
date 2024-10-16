@@ -20,10 +20,24 @@ namespace GenericMessagingService.Services.Sms.Services
         public async Task SendSms(string message, IEnumerable<string> to, string from)
         {
             var fileName = Guid.NewGuid().ToString() + ".txt";
-            var fileText = @$"To: {string.Join(", ", to)}
-From: {from}
+            var fileText = @$"From: {from}
+To: {string.Join(", ", to)}
 Message: {message}";
             await File.WriteAllTextAsync(fileName, fileText);
+        }
+
+        public async Task SendSms(Dictionary<string, string> toMessages, string from)
+        {
+            var fileName = Guid.NewGuid().ToString() + ".txt";
+            var fileLines = new List<string> { $"From: {from}" };
+
+            foreach (var (to, message) in toMessages)
+            {
+                fileLines.Add($"To: {to}");
+                fileLines.Add($"Message: {message}");
+            }
+
+            await File.WriteAllLinesAsync(fileName, fileLines);
         }
     }
 }

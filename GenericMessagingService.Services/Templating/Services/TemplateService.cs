@@ -1,36 +1,41 @@
-﻿using GenericMessagingService.Types.Config;
+﻿using GenericMessagingService.Services.Templating.Services.Formatting;
+using GenericMessagingService.Services.Templating.Services.Location;
+using GenericMessagingService.Types.Config;
 using GenericMessagingService.Types.Template;
-using RazorEngineCore;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace GenericMessagingService.Services.Templating.Services
 {
     public interface ITemplateService
     {
-        Task<TemplateResponse> GetTemplate(TemplateRequest request);
+        Task<(string Body, string? Subject)?> GetTemplate(TemplateRequest request);
     }
 
     internal class TemplateService : ITemplateService
     {
-        private ITemplateService templateService;
+        private readonly TemplateSettings templateSettings;
+        private readonly ITemplateFormattingService templateFormattingService;
+        private readonly ITemplateLocationService templateLocationService;
 
         public TemplateService(
             TemplateSettings templateSettings,
-            ITemplateStrategyResolver templateStrategyResolver)
+            ITemplateFormattingServiceResolver templateFormattingServiceResolver,
+            ITemplateLocationServiceResolver templateLocationServiceResolver)
         {
-            templateService = templateStrategyResolver.Resolve(templateSettings.TemplateStrategy);
+            this.templateSettings = templateSettings;
+            this.templateFormattingService = templateFormattingServiceResolver.Resolve();
+            this.templateLocationService = templateLocationServiceResolver.Resolve();
         }
 
-        public Task<TemplateResponse> GetTemplate(TemplateRequest request)
+        public async Task<(string Body, string? Subject)?> GetTemplate(TemplateRequest request)
         {
-            // determine the type of email template
-            return templateService.GetTemplate(request);
+            var (template, subject) = await templateLocationService.LocateTemplateAsync(request.TemplateName);
+            if(template == null)
+            {
+                return null;
+            }
+            var body = await templateFormattingService.FormatTemplate(template, request.Data);
+            return (body, subject);
         }
     }
 }

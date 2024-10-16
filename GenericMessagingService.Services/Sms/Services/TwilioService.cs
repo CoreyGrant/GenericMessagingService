@@ -16,12 +16,23 @@ namespace GenericMessagingService.Services.Sms.Services
         public TwilioService(TwilioSettings settings)
         {
             this.settings = settings;
+            TwilioClient.Init(settings.AccountSid, settings.AuthToken);
         }
 
         public async Task SendSms(string message, IEnumerable<string> to, string from)
         {
-            TwilioClient.Init(settings.AccountSid, settings.AuthToken);
             foreach (var toNumber in to)
+            {
+                await MessageResource.CreateAsync(
+                    new Twilio.Types.PhoneNumber(toNumber),
+                    from: new Twilio.Types.PhoneNumber(from),
+                    body: message);
+            }
+        }
+
+        public async Task SendSms(Dictionary<string, string> toMessages, string from)
+        {
+            foreach (var (toNumber, message) in toMessages) 
             {
                 await MessageResource.CreateAsync(
                     new Twilio.Types.PhoneNumber(toNumber),

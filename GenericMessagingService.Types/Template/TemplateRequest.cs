@@ -9,6 +9,6 @@ namespace GenericMessagingService.Types.Template
     public class TemplateRequest
     {
         public string TemplateName { get; set; }
-        public Dictionary<string, string> Data { get; set; }
+        public IDictionary<string, string> Data { get; set; }
     }
 }

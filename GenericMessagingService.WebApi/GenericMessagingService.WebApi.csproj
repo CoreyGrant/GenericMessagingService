@@ -25,4 +25,6 @@
     </Content>
   </ItemGroup>
 
+  <ProjectExtensions><VisualStudio><UserProperties configschema_4combo-template-schema_1json__JsonSchema="http://json-schema.org/draft-04/schema" /></VisualStudio></ProjectExtensions>
+
 </Project>

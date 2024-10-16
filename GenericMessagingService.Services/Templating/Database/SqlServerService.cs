@@ -10,14 +10,14 @@ namespace GenericMessagingService.Services.Templating.Database
 {
     internal class SqlServerService : IDatabaseService
     {
-        private readonly DatabaseTemplateSettings settings;
+        private readonly DatabaseTemplateLocationSettings settings;
 
-        public SqlServerService(DatabaseTemplateSettings settings) 
+        public SqlServerService(DatabaseTemplateLocationSettings settings) 
         {
             this.settings = settings;
         }
 
-        public async Task<(string Template, string Subject)?> GetTemplate(string templateName)
+        public async Task<(string Template, string? Subject)?> GetTemplate(string templateName)
         {
             try
             {

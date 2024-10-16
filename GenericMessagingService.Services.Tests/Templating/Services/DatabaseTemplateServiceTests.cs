@@ -9,7 +9,7 @@ namespace GenericMessagingService.Services.Tests.Templating.Services
 {
     public class DatabaseTemplateServiceTests
     {
-        public DatabaseTemplateService sut;
+        //public DatabaseTemplateService sut;
         public DatabaseTemplateServiceTests() 
         {
 

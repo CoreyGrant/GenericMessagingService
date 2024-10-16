@@ -2,7 +2,11 @@
 using GenericMessagingService.Services.Templating;
 using GenericMessagingService.Services.Templating.Database;
 using GenericMessagingService.Services.Templating.Services;
+using GenericMessagingService.Services.Templating.Services.Formatting;
+using GenericMessagingService.Services.Templating.Services.Location;
+using GenericMessagingService.Types.Config;
 using Microsoft.Extensions.DependencyInjection;
+using SendGrid;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,9 +21,15 @@ namespace GenericMessagingService.Services
         {
             container.AddTransient<ITemplateService, TemplateService>();
             container.AddTransient<IEmailSenderService, EmailSenderService>();
-            container.AddTransient<IEmailStrategyResolver, EmailStrategyResolver>();
-            container.AddTransient<ITemplateStrategyResolver, TemplateStrategyResolver>();
-            container.AddTransient<IDatabaseStrategyResolver, DatabaseStrategyResolver>();
+            container.AddSingleton<IEmailStrategyResolver, EmailStrategyResolver>();
+            container.AddSingleton<ITemplateLocationServiceResolver, TemplateLocationServiceResolver>();
+            container.AddSingleton<ITemplateFormattingServiceResolver, TemplateFormattingServiceResolver>();
+            container.AddSingleton<IDatabaseStrategyResolver, DatabaseStrategyResolver>();
+
+            container.AddSingleton<ISendGridClient>((a) => new SendGridClient(new SendGridClientOptions
+            {
+                ApiKey = a.GetService<EmailSettings>().SendGrid.ApiKey
+            }));
             return container;
         }
     }
