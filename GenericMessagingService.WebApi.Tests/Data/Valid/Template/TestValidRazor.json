@@ -1,0 +1,8 @@
+{
+  "template": {
+    "location": { "remote": {} },
+    "formatting": {
+      "razor": {}
+    }
+  }
+}

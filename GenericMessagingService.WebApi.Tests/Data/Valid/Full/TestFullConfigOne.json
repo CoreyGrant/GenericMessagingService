@@ -1,0 +1,39 @@
+{
+  "email": {
+    "folder": { "folderPath": "test" }
+  },
+  "sms": {
+    "folder": { "folderPath": "test" }
+  },
+  "comboTemplate": {
+    "strategy": "new|old",
+    "combo": {
+      "new": {
+        "location": {
+          "database": {
+            "connectionString": "test",
+            "templateColumn": "test",
+            "lookupColumn": "test",
+            "table": "test"
+          }
+        },
+        "formatting": {
+          "basic": {}
+        }
+      },
+      "old": {
+        "location": {
+          "folder": {
+            "basePath": "test",
+            "fixed": {
+              "a": "b"
+            }
+          }
+        },
+        "formatting": {
+          "razor": {}
+        }
+      }
+    }
+  }
+}

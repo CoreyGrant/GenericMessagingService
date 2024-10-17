@@ -11,9 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenericMessagingService.Cli
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenericMessagingService.Services", "GenericMessagingService.Services\GenericMessagingService.Services.csproj", "{9D1D5FBA-1FDE-4AD5-9F58-158119846800}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericMessagingService.Services.Tests", "GenericMessagingService.Services.Tests\GenericMessagingService.Services.Tests.csproj", "{115C7742-B31F-40D9-8088-6740B801584D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenericMessagingService.Services.Tests", "GenericMessagingService.Services.Tests\GenericMessagingService.Services.Tests.csproj", "{115C7742-B31F-40D9-8088-6740B801584D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericMessagingService.Client.Tests", "GenericMessagingService.Client.Tests\GenericMessagingService.Client.Tests.csproj", "{FE7B5518-2154-4298-88D6-75BD7C5B8E6B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenericMessagingService.Client.Tests", "GenericMessagingService.Client.Tests\GenericMessagingService.Client.Tests.csproj", "{FE7B5518-2154-4298-88D6-75BD7C5B8E6B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericMessagingService.WebApi.Tests", "GenericMessagingService.WebApi.Tests\GenericMessagingService.WebApi.Tests.csproj", "{ADEADB4E-7530-4894-AA78-42BFB992C601}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{FE7B5518-2154-4298-88D6-75BD7C5B8E6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE7B5518-2154-4298-88D6-75BD7C5B8E6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FE7B5518-2154-4298-88D6-75BD7C5B8E6B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADEADB4E-7530-4894-AA78-42BFB992C601}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADEADB4E-7530-4894-AA78-42BFB992C601}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADEADB4E-7530-4894-AA78-42BFB992C601}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADEADB4E-7530-4894-AA78-42BFB992C601}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

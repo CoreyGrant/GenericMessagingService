@@ -1,0 +1,8 @@
+{
+  "sms": {
+    "twilio": {
+      "accountSid": "test",
+      "authToken": "test"
+    }
+  }
+}

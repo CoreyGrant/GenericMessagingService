@@ -1,0 +1,7 @@
+{
+  "email": {
+    "sendGrid": {
+      "apiKey": "test"
+    }
+  }
+}

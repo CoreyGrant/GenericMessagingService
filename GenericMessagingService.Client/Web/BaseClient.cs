@@ -1,4 +1,5 @@
-﻿using GenericMessagingService.Client.Utils;
+﻿using GenericMessagingService.Client.Interfaces;
+using GenericMessagingService.Client.Utils;
 using GenericMessagingService.Types.Shared;
 using Newtonsoft.Json;
 using System;
@@ -8,18 +9,14 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GenericMessagingService.Client
+namespace GenericMessagingService.Client.Web
 {
-    public interface IBaseClient
-    {
-
-    }
     internal abstract class BaseClient : IBaseClient
     {
-        private readonly ClientSettings settings;
+        private readonly WebClientSettings settings;
         protected readonly IClassToDictionaryConverter converter;
 
-        public BaseClient(ClientSettings settings, IClassToDictionaryConverter converter)
+        public BaseClient(WebClientSettings settings, IClassToDictionaryConverter converter)
         {
             this.settings = settings;
             this.converter = converter;
@@ -31,7 +28,7 @@ namespace GenericMessagingService.Client
             var response = await client.GetAsync(url);
             if (!response.IsSuccessStatusCode)
             {
-                
+
             }
             var jsonString = await response.Content.ReadAsStringAsync();
             var apiResponse = JsonConvert.DeserializeObject<ApiResponse<T>>(jsonString)!;

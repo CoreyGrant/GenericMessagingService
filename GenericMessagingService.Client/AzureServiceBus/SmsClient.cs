@@ -1,4 +1,6 @@
-﻿using GenericMessagingService.Client.Utils;
+﻿using GenericMessagingService.Client.Interfaces;
+using GenericMessagingService.Client.Utils;
+using GenericMessagingService.Types.Email;
 using GenericMessagingService.Types.Sms;
 using System;
 using System.Collections.Generic;
@@ -6,49 +8,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GenericMessagingService.Client
+namespace GenericMessagingService.Client.AzureServiceBus
 {
-    public interface ISmsClient : IBaseClient
-    {
-        Task SendPlainSms(
-            string to,
-            string message,
-            string? from = null);
-        Task SendPlainSms(
-            IList<string> to,
-            string message,
-            string? from = null);
-        Task SendTemplateSms(
-            string to,
-            string templateName,
-            IDictionary<string, string> data,
-            string? from = null);
-        Task SendTemplateSms<T>(string to, string templateName, T data, string? from = null) where T : class;
-        Task SendTemplateSms(
-            IList<string> to,
-            string templateName,
-            IDictionary<string, string> data,
-            string? from = null);
-        Task SendTemplateSms<T>(
-            IList<string> to,
-            string templateName,
-            T data,
-            string? from = null) where T : class;
-        Task SendTemplateSms(
-            IList<string> to,
-            string templateName,
-            IDictionary<string, IDictionary<string, string>> toData,
-            string? from = null);
-        Task SendTemplateSms<T>(
-            IList<string> to,
-            string templateName,
-            IDictionary<string, T> data,
-            string? from = null) where T : class;
-    }
-
     internal class SmsClient : BaseClient, ISmsClient
     {
-        public SmsClient(ClientSettings settings, IClassToDictionaryConverter converter) : base(settings, converter)
+        public SmsClient(IServiceBusClient serviceBusClient, IClassToDictionaryConverter converter) : base(serviceBusClient, converter)
         {
         }
 
@@ -57,7 +21,7 @@ namespace GenericMessagingService.Client
             string message,
             string? from = null)
         {
-            await SendSms(new SmsRequest
+            await AddSmsMessage(new SmsRequest
             {
                 To = new[] { to },
                 Template = message,
@@ -70,7 +34,7 @@ namespace GenericMessagingService.Client
             string message,
             string? from = null)
         {
-            await SendSms(new SmsRequest
+            await AddSmsMessage(new SmsRequest
             {
                 To = to,
                 Template = message,
@@ -84,7 +48,7 @@ namespace GenericMessagingService.Client
             IDictionary<string, string> data,
             string? from = null)
         {
-            await SendSms(new SmsRequest
+            await AddSmsMessage(new SmsRequest
             {
                 To = new[] { to },
                 TemplateName = templateName,
@@ -95,7 +59,7 @@ namespace GenericMessagingService.Client
 
         public async Task SendTemplateSms<T>(string to, string templateName, T data, string? from = null) where T : class
         {
-            await SendTemplateSms(to, templateName, converter.Convert<T>(data), from);
+            await SendTemplateSms(to, templateName, converter.Convert(data), from);
         }
 
         public async Task SendTemplateSms(
@@ -104,7 +68,7 @@ namespace GenericMessagingService.Client
             IDictionary<string, string> data,
             string? from = null)
         {
-            await SendSms(new SmsRequest
+            await AddSmsMessage(new SmsRequest
             {
                 To = to,
                 TemplateName = templateName,
@@ -119,7 +83,7 @@ namespace GenericMessagingService.Client
             T data,
             string? from = null) where T : class
         {
-            await SendTemplateSms(to, templateName, converter.Convert<T>(data), from);
+            await SendTemplateSms(to, templateName, converter.Convert(data), from);
         }
 
         public async Task SendTemplateSms(
@@ -128,7 +92,7 @@ namespace GenericMessagingService.Client
             IDictionary<string, IDictionary<string, string>> toData,
             string? from = null)
         {
-            await SendSms(new SmsRequest
+            await AddSmsMessage(new SmsRequest
             {
                 To = to,
                 TemplateName = templateName,
@@ -143,12 +107,12 @@ namespace GenericMessagingService.Client
             IDictionary<string, T> data,
             string? from = null) where T : class
         {
-            await SendTemplateSms(to, templateName, data.ToDictionary(x => x.Key, x => converter.Convert<T>(x.Value)), from);
+            await SendTemplateSms(to, templateName, data.ToDictionary(x => x.Key, x => converter.Convert(x.Value)), from);
         }
 
-        private async Task SendSms(SmsRequest smsRequest)
+        private async Task AddSmsMessage(SmsRequest smsRequest)
         {
-            await Post("/sms/", smsRequest);
+            await this.serviceBusClient.AddSmsMessage(smsRequest);
         }
     }
 }

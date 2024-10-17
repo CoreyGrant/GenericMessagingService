@@ -3,8 +3,14 @@ using GenericMessagingService.WebApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var gmsSettings = new GenericMessagingServiceSettings
+{
+    BindingType = BindingType.Web,
+    ConfigPath = "Config/defaultConfig.json"
+};
+
 // Add services to the container.
-builder.Services.AddWebApi();
+builder.Services.AddWebApi(gmsSettings);
 
 // Build the application
 var app = builder.Build();
