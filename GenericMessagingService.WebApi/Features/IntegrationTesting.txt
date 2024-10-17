@@ -1,0 +1,1 @@
+﻿There needs to be an integration test project which flexes the microservice both via HTTP and maybe an AzureServiceBus. This should be a simple console project, so it can easily be run while the webapi project is running, and use the client project to send requests.

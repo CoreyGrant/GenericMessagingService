@@ -68,15 +68,19 @@ namespace GenericMessagingService.Client.AzureServiceBus
                 Subject = messageGuid,
                 Body = BinaryData.FromString(messageJson)
             });
-            // wait max 3 seconds for a response message
-            // in 0.5 second increments
             var messages = templateReceiver.ReceiveMessagesAsync();
             await foreach(var messageResponse in messages)
             {
                 if(messageResponse.Subject == messageGuid)
                 {
-                    await templateReceiver.CompleteMessageAsync(messageResponse);
-                    return JsonConvert.DeserializeObject<TemplateResponse>(messageResponse.ToString());
+                    try
+                    {
+                        await templateReceiver.CompleteMessageAsync(messageResponse);
+                        return JsonConvert.DeserializeObject<TemplateResponse>(messageResponse.ToString());
+                    } catch(Exception ex)
+                    {
+                        await templateReceiver.DeadLetterMessageAsync(messageResponse);
+                    }
                 }
             }
             return null;

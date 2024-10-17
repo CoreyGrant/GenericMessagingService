@@ -18,7 +18,7 @@ Templating:
 		- database
 		- folder structure
 		- remote file store
-	The tmeplates should support multiple formats
+	The templates should support multiple formats
 		- basic string format
 		- razor
 		- handlebars

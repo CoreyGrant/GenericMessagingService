@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Generic Messaging Service Test Harness</title>
+    <link rel="stylesheet" href="index.css"/>
+</head>
+<body>
+    <div class="input-group">
+        <label>Api Key</label>
+        <input type="text" id="api-key"/>
+    </div>
+    <div id="tab-group">
+        <div id="tab-header">
+            <div id="tab-header-template">Template</div>
+            <div id="tab-header-email">Email</div>
+            <div id="tab-header-sms">Sms</div>
+        </div>
+        <div id="tab-content">
+            <div id="tab-content-template">
+                <div id="template-request">
+                    <div class="input-group">
+                        <label>Template name</label>
+                        <input id="t-template-name" />
+                    </div>
+                    <div class="input-group">
+                        <label>JSON data</label>
+                        <textarea id="t-template-data"></textarea>
+                    </div>
+                    <button type="button" id="template-submit">Submit</button>
+                </div>
+                <div id="template-response">
+                    <p id="template-result-subject"></p>
+                    <code id="template-result-body"></code>
+                </div>
+            </div>
+            <div id="tab-content-email" class="hidden">
+
+            </div>
+            <div id="tab-content-sms" class="hidden">
+
+            </div>
+        </div>
+    </div>
+    <script src="index.js"/>
+</body>
+</html>

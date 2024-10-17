@@ -70,6 +70,7 @@ namespace GenericMessagingService.Client.Web
         {
             var client = new HttpClient();
             client.BaseAddress = new Uri(settings.BaseUrl);
+            client.DefaultRequestHeaders.Add("X-API-KEY", settings.ApiKey);
             return client;
         }
     }

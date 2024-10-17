@@ -1,18 +1,20 @@
 ﻿using GenericMessagingService.Services.Templating.Services;
 using GenericMessagingService.Types.Shared;
 using GenericMessagingService.Types.Template;
+using GenericMessagingService.WebApi.Filters;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GenericMessagingService.WebApi.Controllers
 {
+    [ApiKeyFilter]
     [Route("api/[controller]")]
     [ApiController]
     public class TemplateController : ControllerBase
     {
-        private readonly ITemplateService templateService;
+        private readonly ITemplateRunnerService templateService;
 
-        public TemplateController(ITemplateService templateService)
+        public TemplateController(ITemplateRunnerService templateService)
         {
             this.templateService = templateService;
         }
@@ -22,7 +24,7 @@ namespace GenericMessagingService.WebApi.Controllers
         {
             try
             {
-                var result = await this.templateService.GetTemplate(request);
+                var result = await this.templateService.RunTemplate(request.TemplateName, request.Data);
                 if (result == null) { return new ApiResponse<TemplateResponse>("Failed to find template"); }
                 return new ApiResponse<TemplateResponse>(new TemplateResponse { Body = result.Value.Body, Subject = result.Value.Subject});
             }

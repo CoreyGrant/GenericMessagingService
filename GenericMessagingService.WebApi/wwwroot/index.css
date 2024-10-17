@@ -1,0 +1,42 @@
+﻿#tab-group{
+
+}
+#tab-header {
+    display: flex;
+    flex-direction: row;
+    border-top: 2px solid black;
+    border-right: 2px solid black;
+}
+#tab-header>div{
+    border-left: 2px solid black;
+    cursor: pointer;
+}
+#tab-header>div:last-child{
+    border-right: 2px solid black;
+}
+#tab-content{
+    border: 2px solid black;
+    display: flex;
+    flex-direction: column;
+}
+#tab-content-template {
+    display: flex;
+    flex-direction: column;
+}
+#template-request {
+    display: flex;
+    flex-direction: column;
+}
+#template-response {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group{
+    display: flex;
+    flex-direction: column;
+}
+
+.hidden{
+    display: none;
+}

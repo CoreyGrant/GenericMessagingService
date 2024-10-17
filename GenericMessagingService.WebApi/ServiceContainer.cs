@@ -1,5 +1,6 @@
 ﻿using GenericMessagingService.Services;
 using GenericMessagingService.Types.Config;
+using GenericMessagingService.WebApi.AzureServiceBus;
 using GenericMessagingService.WebApi.Controllers;
 using GenericMessagingService.WebApi.Setup;
 using Newtonsoft.Json;
@@ -10,6 +11,7 @@ namespace GenericMessagingService.WebApi
     {
         public static IServiceCollection AddWebApi(this IServiceCollection services, GenericMessagingServiceSettings settings)
         {
+            services.AddSingleton(settings);
             AppSettings? config = null;
             if(settings.Config != null)
             {
@@ -27,6 +29,10 @@ namespace GenericMessagingService.WebApi
             services.AddMessagingServices();
             if (settings.BindingType.HasFlag(BindingType.Web))
             {
+                if (string.IsNullOrEmpty(settings.ApiKey))
+                {
+                    throw new ConfigValidationException("ApiKey is required for Web");
+                }
                 if (config.Email != null)
                 {
                     services.AddTransient<EmailController>();
@@ -42,7 +48,12 @@ namespace GenericMessagingService.WebApi
             }
             if (settings.BindingType.HasFlag(BindingType.AzureServiceBus))
             {
-
+                if(settings.AzureServiceBus == null)
+                {
+                    throw new ConfigValidationException("AzureServiceBus config is required");
+                }
+                services.AddSingleton(settings.AzureServiceBus);
+                services.AddSingleton<IServiceBusClient, ServiceBusClient>();
             }
             
             return services;

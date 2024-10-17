@@ -3,11 +3,13 @@ using GenericMessagingService.Services.Templating;
 using GenericMessagingService.Types.Email;
 using GenericMessagingService.Types.Shared;
 using GenericMessagingService.Types.Sms;
+using GenericMessagingService.WebApi.Filters;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GenericMessagingService.WebApi.Controllers
 {
+    [ApiKeyFilter]
     [Route("api/[controller]")]
     [ApiController]
     public class SmsController : ControllerBase

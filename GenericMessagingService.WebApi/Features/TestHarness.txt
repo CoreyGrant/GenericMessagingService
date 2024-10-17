@@ -1,0 +1,2 @@
+﻿The service should optionally allow a test harness to ease development of templates
+This should be a simple webpage which allows submission of templateName and jsonData and receive a template back

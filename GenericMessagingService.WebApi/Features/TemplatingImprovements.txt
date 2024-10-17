@@ -1,0 +1,3 @@
+﻿TemplateFormattingService should also take in the template name
+This will allow razor template precompilation, template caching etc.
+Both will also require a way to bypass the cache, for development purposes. This will be slower but will allow templates to be changed without restarting the microservice.

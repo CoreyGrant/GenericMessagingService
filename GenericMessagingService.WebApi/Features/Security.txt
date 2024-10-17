@@ -1,0 +1,2 @@
+﻿The API needs the endpoints secured, most likely with a simple API key.
+-- Done
