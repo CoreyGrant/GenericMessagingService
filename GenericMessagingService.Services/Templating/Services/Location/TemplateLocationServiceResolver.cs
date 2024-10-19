@@ -1,4 +1,5 @@
-﻿using GenericMessagingService.Services.Templating.Database;
+﻿using GenericMessagingService.Services.Cache;
+using GenericMessagingService.Services.Templating.Database;
 using GenericMessagingService.Services.Utils;
 using GenericMessagingService.Types.Config;
 using System;

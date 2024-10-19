@@ -1,4 +1,5 @@
-﻿using GenericMessagingService.Types.Config;
+﻿using GenericMessagingService.Services.Cache;
+using GenericMessagingService.Types.Config;
 using RazorEngineCore;
 using System;
 using System.Collections.Generic;
@@ -10,26 +11,33 @@ namespace GenericMessagingService.Services.Templating.Services.Formatting
 {
     public interface ITemplateFormattingServiceResolver
     {
-        ITemplateFormattingService Resolve(TemplateFormattingSettings settings);
+        ITemplateFormattingService Resolve(TemplateSettings settings);
     }
 
     public class TemplateFormattingServiceResolver : ITemplateFormattingServiceResolver
     {
         private readonly IRazorEngine razorEngine;
+        private readonly IHashService hashService;
+        private readonly ICacheManager cacheManager;
 
         public TemplateFormattingServiceResolver(
-            IRazorEngine razorEngine)
+            IRazorEngine razorEngine,
+            IHashService hashService,
+            ICacheManager cacheManager)
         {
             this.razorEngine = razorEngine;
+            this.hashService = hashService;
+            this.cacheManager = cacheManager;
         }
 
-        public ITemplateFormattingService Resolve(TemplateFormattingSettings settings)
+        public ITemplateFormattingService Resolve(TemplateSettings tSettings)
         {
+            var settings = tSettings.Formatting;
             var razor = settings.Razor;
             var basic = settings.Basic;
             if(razor != null)
             {
-                return new RazorTemplateFormattingService(razor, razorEngine);
+                return new RazorTemplateFormattingService(tSettings, razor, razorEngine, cacheManager, hashService);
             } else if (basic != null)
             {
                 return new BasicTemplateFormattingService();

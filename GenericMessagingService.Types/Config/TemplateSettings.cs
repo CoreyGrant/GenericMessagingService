@@ -14,6 +14,7 @@ namespace GenericMessagingService.Types.Config
 
     public class TemplateSettings
     {
+        public bool Cache { get; set; }
         public TemplateLocationSettings Location { get; set; }
         public TemplateFormattingSettings Formatting { get; set; }
     }

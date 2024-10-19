@@ -1,3 +1,3 @@
-﻿TemplateFormattingService should also take in the template name
-This will allow razor template precompilation, template caching etc.
+﻿Template caching is needed. Location lookups needs to be cachable, as does certain formatting middle-steps, like razor templating
 Both will also require a way to bypass the cache, for development purposes. This will be slower but will allow templates to be changed without restarting the microservice.
+-- Done

@@ -1,4 +1,5 @@
-﻿using GenericMessagingService.Services.Utils;
+﻿using GenericMessagingService.Services.Cache;
+using GenericMessagingService.Services.Utils;
 using GenericMessagingService.Types.Config;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,9 @@ namespace GenericMessagingService.Services.Templating.Services.Location
         private readonly IFileManager fileManager;
         private Dictionary<string, Regex> regexCache;
 
-        public FolderTemplateLocationService(FolderTemplateLocationSettings settings, IFileManager fileManager) 
+        public FolderTemplateLocationService(
+            FolderTemplateLocationSettings settings,
+            IFileManager fileManager) 
         {
             this.settings = settings;
             this.fileManager = fileManager;
@@ -28,7 +31,8 @@ namespace GenericMessagingService.Services.Templating.Services.Location
             if (TryMatchName(templateName, out var path)) 
             {
                 var fileName = Path.Combine(settings.BaseFolder, path);
-                return (await fileManager.GetFileAsync(fileName), null);
+                var result = (await fileManager.GetFileAsync(fileName), (string)null);
+                return result;
             }
             return (null, null);
         }
@@ -37,7 +41,7 @@ namespace GenericMessagingService.Services.Templating.Services.Location
         {
             if (settings.Fixed?.ContainsKey(templateName) ?? false)
             {
-                location = settings.Fixed[templateName] + ".razor";
+                location = settings.Fixed[templateName];
                 return true;
             }
             foreach (var (k, v) in settings.Regex ?? new Dictionary<string, string>())
@@ -47,7 +51,7 @@ namespace GenericMessagingService.Services.Templating.Services.Location
                 if (regexResult.Success)
                 {
                     var matches = regexResult.Groups.Cast<Group>().Skip(1).Select(x => x.Value).ToArray();
-                    location = string.Format(v, matches) + ".razor";
+                    location = string.Format(v, matches);
                     return true;
                 }
             }
