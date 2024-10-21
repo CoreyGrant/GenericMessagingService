@@ -29,7 +29,7 @@ namespace GenericMessagingService.Client.Web
 
         private async Task<TemplateResponse> GetTemplate(TemplateRequest templateRequest)
         {
-            return await Post<TemplateRequest, TemplateResponse>("/template/", templateRequest);
+            return await Post<TemplateRequest, TemplateResponse>("/api/template/", templateRequest);
         }
     }
 }

@@ -18,7 +18,12 @@ namespace GenericMessagingService.Services.Templating.Services.Location
             IDatabaseStrategyResolver databaseStrategyResolver) 
         {
             this.settings = settings;
-            this.databaseService = databaseStrategyResolver.Resolve(settings.Type);
+            this.databaseService = databaseStrategyResolver.Resolve(settings);
+        }
+
+        public async Task<List<string>> GetTemplateNames()
+        {
+            return await this.databaseService.GetTemplateNames();
         }
 
         public async Task<(string?, string?)> LocateTemplateAsync(string templateName)

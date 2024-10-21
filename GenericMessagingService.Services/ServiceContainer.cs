@@ -1,4 +1,6 @@
-﻿using GenericMessagingService.Services.Email;
+﻿using GenericMessagingService.Services.Cache;
+using GenericMessagingService.Services.Email;
+using GenericMessagingService.Services.Sms;
 using GenericMessagingService.Services.Templating;
 using GenericMessagingService.Services.Templating.Database;
 using GenericMessagingService.Services.Templating.Services;
@@ -25,16 +27,20 @@ namespace GenericMessagingService.Services
             container.AddTransient<IComboTemplateServiceFactory, ComboTemplateServiceFactory>();
             container.AddTransient<ITemplateRunnerService, TemplateRunnerService>();
             container.AddTransient<IFileManager, FileManager>();
+            container.AddTransient<IHashService, HashSerice>();
             container.AddTransient<IEmailSenderService, EmailSenderService>();
-            container.AddSingleton<IEmailStrategyResolver, EmailStrategyResolver>();
-            container.AddSingleton<ITemplateLocationServiceResolver, TemplateLocationServiceResolver>();
-            container.AddSingleton<ITemplateFormattingServiceResolver, TemplateFormattingServiceResolver>();
-            container.AddSingleton<IDatabaseStrategyResolver, DatabaseStrategyResolver>();
+            container.AddTransient<IEmailStrategyResolver, EmailStrategyResolver>();
+            container.AddTransient<ITemplateLocationServiceResolver, TemplateLocationServiceResolver>();
+            container.AddTransient<ITemplateFormattingServiceResolver, TemplateFormattingServiceResolver>();
+            container.AddTransient<IDatabaseStrategyResolver, DatabaseStrategyResolver>();
+            container.AddTransient<ISmsSenderService, SmsSenderService>();
+            container.AddTransient<ISmsStrategyResolver, SmsStrategyResolver>();
             container.AddSingleton<ISendGridClient>((a) => new SendGridClient(new SendGridClientOptions
             {
                 ApiKey = a.GetService<EmailSettings>().SendGrid.ApiKey
             }));
             container.AddTransient<IRazorEngine, RazorEngine>();
+            container.AddSingleton<ICacheManager, MemoryCacheManager>();
             return container;
         }
     }

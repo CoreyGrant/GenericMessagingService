@@ -4,44 +4,60 @@
     "overrideToAddress": "",
     "defaultFromAddress": "",
     "folder": {
-      "folderPath": ""
+      "folderPath": "test"
     }
   },
   "sms": {
     "twilio": {
-      "accountSid": "",
-      "authToken": ""
+      "accountSid": "test",
+      "authToken": "test"
     }
   },
-  "comboTemplate": {
-    "strategy": "new|legacy",
-    "combo": {
-      "new": {
-        "location": {
-          "folder": {
-            "baseFolder": "",
-            "fixed": {},
-            "regex": {}
-          }
-        },
-        "formatting": {
-          "razor": {}
-        }
-      },
-      "legacy": {
-        "location": {
-          "database": {
-            "table": "",
-            "connectionString": "",
-            "lookupColumn": "",
-            "templateColumn": "",
-            "subjectColumn": ""
-          }
-        },
-        "formatting": {
-          "basic": {}
+  "template": {
+    "location": {
+      "folder": {
+        "baseFolder": "RazorTemplates",
+        "fixed": {},
+        "regex": {
+          "(^[A-Za-z0-9\\/\\-]+$)": "{0}.cshtml"
         }
       }
+    },
+    "formatting": {
+      "razor": {}
     }
   }
+  //"comboTemplate": {
+  //  "strategy": "new|legacy",
+  //  "combo": {
+  //    "new": {
+  //      "location": {
+  //        "folder": {
+  //          "baseFolder": "templates",
+  //          "fixed": {},
+  //          "regex": {
+  //            "(^[A-Za-z0-9\\-]+$)":  "{0}.razor"
+  //          }
+  //        }
+  //      },
+  //      "formatting": {
+  //        "razor": {}
+  //      }
+  //    },
+  //    "legacy": {
+  //      "location": {
+  //        "database": {
+  //          "table": "test",
+  //          "connectionString": "test",
+  //          "lookupColumn": "test",
+  //          "templateColumn": "test",
+  //          "subjectColumn": "test"
+  //        }
+  //      },
+  //      "formatting": {
+  //        "basic": {}
+  //      }
+  //    }
+  //  }
+  //}
 }

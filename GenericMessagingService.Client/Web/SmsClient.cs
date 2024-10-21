@@ -111,7 +111,7 @@ namespace GenericMessagingService.Client.Web
 
         private async Task SendSms(SmsRequest smsRequest)
         {
-            await Post("/sms/", smsRequest);
+            await Post("/api/sms/", smsRequest);
         }
     }
 }

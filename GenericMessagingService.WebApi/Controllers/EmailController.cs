@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace GenericMessagingService.WebApi.Controllers
 {
     [ApiKeyFilter]
+    [ActiveFeatureFilter("email")]
     [Route("api/[controller]")]
     [ApiController]
     public class EmailController : ControllerBase
@@ -21,7 +22,7 @@ namespace GenericMessagingService.WebApi.Controllers
             this.emailSenderService = emailSenderService;
         }
 
-        [HttpPost("/")]
+        [HttpPost]
         public async Task<ApiResponse> SendEmail(EmailRequest emailRequest)
         {
             try

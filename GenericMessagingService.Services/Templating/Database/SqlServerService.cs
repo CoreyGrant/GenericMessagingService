@@ -54,5 +54,23 @@ namespace GenericMessagingService.Services.Templating.Database
                 return null; 
             }
         }
+
+        public async Task<List<string>> GetTemplateNames()
+        {
+            var query = $@"SELECT {settings.LookupColumn} FROM {settings.Table}";
+            var templateNames = new List<string>();
+            using (var connection = new SqlConnection(settings.ConnectionString))
+            {
+                await connection.OpenAsync();
+                var command = connection.CreateCommand();
+                command.CommandText = query;
+                var reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    templateNames.Add(reader[settings.TemplateColumn].ToString());
+                }
+            }
+            return templateNames;
+        }
     }
 }

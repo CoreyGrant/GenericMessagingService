@@ -11,7 +11,7 @@ namespace GenericMessagingService.Services.Cache
         string GetHash(string str);
     }
 
-    public class HashSerice
+    public class HashSerice : IHashService
     {
         private readonly FastHashes.FastHash64 hash;
 

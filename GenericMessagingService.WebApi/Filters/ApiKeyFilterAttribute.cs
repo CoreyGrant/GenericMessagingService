@@ -19,7 +19,7 @@ namespace GenericMessagingService.WebApi.Filters
             {
                 context.Result = new BadRequestResult();
             }
-            if(apiKeyHeader != XApiKey)
+            if(apiKeyHeader != expectedHeader)
             {
                 context.Result = new UnauthorizedResult();
             }

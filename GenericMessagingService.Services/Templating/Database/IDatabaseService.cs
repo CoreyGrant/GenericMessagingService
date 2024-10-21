@@ -9,5 +9,6 @@ namespace GenericMessagingService.Services.Templating.Database
     public interface IDatabaseService
     {
         Task<(string Template, string? Subject)?> GetTemplate(string templateName);
+        Task<List<string>> GetTemplateNames();
     }
 }

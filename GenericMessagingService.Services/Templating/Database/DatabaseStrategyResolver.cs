@@ -9,7 +9,7 @@ namespace GenericMessagingService.Services.Templating.Database
 {
     public interface IDatabaseStrategyResolver
     {
-        IDatabaseService Resolve(string? type);
+        IDatabaseService Resolve(DatabaseTemplateLocationSettings settings);
     }
 
     /// <summary>
@@ -17,15 +17,13 @@ namespace GenericMessagingService.Services.Templating.Database
     /// </summary>
     public class DatabaseStrategyResolver : IDatabaseStrategyResolver
     {
-        private readonly DatabaseTemplateLocationSettings settings;
-
-        public DatabaseStrategyResolver(DatabaseTemplateLocationSettings settings) 
+        public DatabaseStrategyResolver() 
         {
-            this.settings = settings;
         }
 
-        public IDatabaseService Resolve(string? type)
+        public IDatabaseService Resolve(DatabaseTemplateLocationSettings settings)
         {
+            var type = settings.Type;
             if(!string.IsNullOrEmpty(type) || type.ToLower() == "sqlserver")
             {
                 return new SqlServerService(settings);

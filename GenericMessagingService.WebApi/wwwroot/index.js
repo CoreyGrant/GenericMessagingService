@@ -11,9 +11,9 @@
             templateName,
             data
         };
-        var res = await fetch('/template', {
+        var res = await fetch('/api/template', {
             method: "POST",
-            body: JSON.stringify(data),
+            body: JSON.stringify(request),
             headers: {
                 "Content-Type": 'application/json',
                 "X-API-KEY": this.apiKey
@@ -24,7 +24,7 @@
         }
     }
     async sendEmail(request) {
-        return await fetch('/email', {
+        return await fetch('/api/email', {
             method: "POST",
             body: JSON.stringify(request),
             headers: {
@@ -34,7 +34,7 @@
         });
     }
     async sendSms(request) {
-        return await fetch('/sms', {
+        return await fetch('/api/sms', {
             method: "POST",
             body: JSON.stringify(request),
             headers: {
@@ -69,6 +69,15 @@
     var tabContentEmail = document.getElementById("tab-content-email");
     var tabContentSms = document.getElementById("tab-content-sms");
 
+    var templateData = localStorage.getItem("template");
+    if (templateData && templateData.length) {
+        var templateObj = JSON.parse(templateData);
+        tabContentTemplateName.value = templateObj.templateName;
+        tabContentTemplateData.value = JSON.stringify(templateObj.templateData, null, 2);
+        apiClientInput.value = templateObj.apiKey;
+        apiClientInput.onchange();
+    }
+
     tabContentTemplateSubmit.onclick = function () {
         var templateName = tabContentTemplateName.value;
         var templateDataString = tabContentTemplateData.value;
@@ -79,6 +88,7 @@
         if (templateDataString && templateDataString.length) {
             templateData = JSON.parse(templateDataString);
         }
+        localStorage.setItem("template", JSON.stringify( { templateName, templateData, apiKey: apiClientInput.value }));
         apiClient.getTemplate(templateName, templateData).then(result => {
             var body = result.body;
             var subject = result.subject;

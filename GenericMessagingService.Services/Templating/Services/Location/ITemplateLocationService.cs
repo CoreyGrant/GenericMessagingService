@@ -9,5 +9,6 @@ namespace GenericMessagingService.Services.Templating.Services.Location
     public interface ITemplateLocationService
     {
         Task<(string?, string?)> LocateTemplateAsync(string templateName);
+        Task<List<string>> GetTemplateNames();
     }
 }

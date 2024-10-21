@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace GenericMessagingService.WebApi.Controllers
 {
     [ApiKeyFilter]
+    [ActiveFeatureFilter("template")]
     [Route("api/[controller]")]
     [ApiController]
     public class TemplateController : ControllerBase
@@ -19,7 +20,7 @@ namespace GenericMessagingService.WebApi.Controllers
             this.templateService = templateService;
         }
 
-        [HttpPost("/")]
+        [HttpPost]
         public async Task<ApiResponse<TemplateResponse>> GetTemplate(TemplateRequest request)
         {
             try
@@ -32,6 +33,12 @@ namespace GenericMessagingService.WebApi.Controllers
             {
                 return new ApiResponse<TemplateResponse>(ex.Message);
             }
+        }
+
+        [HttpGet]
+        public async Task<ApiResponse<List<string>>> GetTemplateNames()
+        {
+
         }
     }
 }

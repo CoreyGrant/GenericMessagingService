@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace GenericMessagingService.WebApi.Controllers
 {
     [ApiKeyFilter]
+    [ActiveFeatureFilter("sms")]
     [Route("api/[controller]")]
     [ApiController]
     public class SmsController : ControllerBase
@@ -21,7 +22,7 @@ namespace GenericMessagingService.WebApi.Controllers
             this.smsSenderService = smsSenderService;
         }
 
-        [HttpPost("/")]
+        [HttpPost]
         public async Task<ApiResponse> SendEmail(SmsRequest smsRequest)
         {
             try

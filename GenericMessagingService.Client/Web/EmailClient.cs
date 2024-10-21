@@ -127,7 +127,7 @@ namespace GenericMessagingService.Client.Web
 
         private async Task SendEmail(EmailRequest emailRequest)
         {
-            await Post("/email/", emailRequest);
+            await Post("/api/email/", emailRequest);
         }
     }
 }

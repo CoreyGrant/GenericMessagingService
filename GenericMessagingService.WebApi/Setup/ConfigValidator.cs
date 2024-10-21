@@ -180,7 +180,7 @@ namespace GenericMessagingService.WebApi.Setup
                     }
                     var fixedValid = folder.Fixed != null && folder.Fixed.Any();
                     var regexValid = folder.Regex != null && folder.Regex.Any();
-                    if(!fixedValid || !regexValid)
+                    if(!fixedValid && !regexValid)
                     {
                         throw new ConfigValidationException("Template Folder requires either Fixed or Regex paths" + subString);
                     }
