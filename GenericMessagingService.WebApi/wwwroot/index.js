@@ -43,6 +43,15 @@
             }
         });
     }
+    async getTemplateNames() {
+        return await fetch('/api/template/names', {
+            method: 'GET',
+            headers: {
+                "Content-Type": 'application/json',
+                "X-API-KEY": this.apiKey
+            }
+        }).then(x => x.json()).then(x => x.data);
+    }
 }
 
 (async function () {
@@ -51,7 +60,6 @@
     apiClientInput.onchange = function () {
         apiClient.setApiKey(apiClientInput.value);
     }
-
     var tabGroup = document.getElementById("tab-group");
     var tabHeader = document.getElementById("tab-header");
     var tabHeaderTemplate = document.getElementById("tab-header-template");

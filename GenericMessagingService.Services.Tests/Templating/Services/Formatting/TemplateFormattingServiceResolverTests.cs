@@ -1,4 +1,5 @@
-﻿using GenericMessagingService.Services.Templating.Services.Formatting;
+﻿using GenericMessagingService.Services.Cache;
+using GenericMessagingService.Services.Templating.Services.Formatting;
 using GenericMessagingService.Types.Config;
 using NSubstitute;
 using RazorEngineCore;
@@ -18,13 +19,15 @@ namespace GenericMessagingService.Services.Tests.Templating.Services.Formatting
         public TemplateFormattingServiceResolverTests()
         {
             var re = Substitute.For<IRazorEngine>();
-            sut = new TemplateFormattingServiceResolver(re);
+            var cacheManager = Substitute.For<ICacheManager>();
+            var hashService = Substitute.For<IHashService>();
+            sut = new TemplateFormattingServiceResolver(re, hashService, cacheManager);
         }
 
         [Fact]
         public async Task TestTemplateFormattingServiceResolverBasic()
         {
-            var config = new TemplateFormattingSettings { Basic = new BasicTemplateFormattingSettings { } };
+            var config = new TemplateSettings { Formatting = new TemplateFormattingSettings { Basic = new BasicTemplateFormattingSettings { } } };
             var service = sut.Resolve(config);
             Assert.True(service is BasicTemplateFormattingService);
         }
@@ -32,7 +35,7 @@ namespace GenericMessagingService.Services.Tests.Templating.Services.Formatting
         [Fact]
         public async Task TestTemplateFormattingServiceResolverRazor()
         {
-            var config = new TemplateFormattingSettings { Razor = new RazorTemplateFormattingSettings { } };
+            var config = new TemplateSettings { Formatting = new TemplateFormattingSettings { Razor = new RazorTemplateFormattingSettings { } } };
             var service = sut.Resolve(config);
             Assert.True(service is RazorTemplateFormattingService);
         }

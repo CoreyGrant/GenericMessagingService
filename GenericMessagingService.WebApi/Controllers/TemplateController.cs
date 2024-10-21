@@ -35,10 +35,10 @@ namespace GenericMessagingService.WebApi.Controllers
             }
         }
 
-        [HttpGet]
-        public async Task<ApiResponse<List<string>>> GetTemplateNames()
-        {
-
-        }
+        //[HttpGet("names")]
+        //public async Task<ApiResponse<List<string>>> GetTemplateNames()
+        //{
+        //    return new ApiResponse<List<string>>(await this.templateService.GetTemplateNames());
+        //}
     }
 }

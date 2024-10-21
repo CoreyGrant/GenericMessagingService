@@ -41,6 +41,16 @@ namespace GenericMessagingService.Services.Templating.Services
             }
             throw new Exception("Failed to get template from combo config");
         }
+
+        //public async Task<List<string>> GetTemplateNames()
+        //{
+        //    var allTemplateNames = new List<string>();
+        //    foreach(var  templateService in templateServices)
+        //    {
+        //        allTemplateNames.AddRange(await templateService.GetTemplateNames());
+        //    }
+        //    return allTemplateNames;
+        //}
     }
 
     public interface IComboTemplateServiceFactory

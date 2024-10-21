@@ -10,47 +10,28 @@ using System.Threading.Tasks;
 
 namespace GenericMessagingService.Services.Templating.Services.Formatting
 {
-    public class RazorTemplateFormattingService : ITemplateFormattingService
+    public class RazorTemplateFormattingService : CompiledTemplateFormattingService<IRazorEngineCompiledTemplate>
     {
-        private readonly TemplateSettings templateSettings;
-        private readonly RazorTemplateFormattingSettings settings;
         private readonly IRazorEngine engine;
-        private readonly ICacheManager cacheManager;
-        private readonly IHashService hashService;
 
         public RazorTemplateFormattingService(
             TemplateSettings templateSettings,
             RazorTemplateFormattingSettings settings,
             IRazorEngine engine,
             ICacheManager cacheManager,
-            IHashService hashService)
+            IHashService hashService) : base(templateSettings, hashService, cacheManager, "razor-template")
         {
-            this.templateSettings = templateSettings;
-            this.settings = settings;
             this.engine = engine;
-            this.cacheManager = cacheManager;
-            this.hashService = hashService;
         }
 
-        public async Task<string> FormatTemplate(string template, IDictionary<string, string> data)
+        protected override async Task<IRazorEngineCompiledTemplate> CompileTemplate(string template)
         {
-            var compiledTemplate = await GetCompiledTemplate(template);
-            return await compiledTemplate.RunAsync(data);
-        }
-
-        private async Task<IRazorEngineCompiledTemplate> GetCompiledTemplate(string template)
-        {
-            if (templateSettings.Cache)
-            {
-                var cacheKey = hashService.GetHash(template);
-                var cached = await cacheManager.Get<IRazorEngineCompiledTemplate>("razor-template", cacheKey);
-                if(cached != null) { return cached; }
-                var compiledTemplate = await engine.CompileAsync(template);
-
-                await cacheManager.Set("razor-template", cacheKey, compiledTemplate);
-                return compiledTemplate;
-            }
             return await engine.CompileAsync(template);
+        }
+
+        protected override async Task<string> Format(IRazorEngineCompiledTemplate template, IDictionary<string, string> data)
+        {
+            return await template.RunAsync(data);
         }
     }
 }

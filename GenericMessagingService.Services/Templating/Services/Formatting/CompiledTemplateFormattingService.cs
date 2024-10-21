@@ -13,7 +13,7 @@ namespace GenericMessagingService.Services.Templating.Services.Formatting
         Task Precompile(IEnumerable<string> templates);
     }
 
-    public abstract class CompiledTemplateFormattingService<TCompiledTemplate> : ITemplateFormattingService where TCompiledTemplate : class
+    public abstract class CompiledTemplateFormattingService<TCompiledTemplate> : ICompiledTemplateFormattingService where TCompiledTemplate : class
     {
         private readonly TemplateSettings settings;
         private readonly IHashService hashService;
@@ -34,8 +34,8 @@ namespace GenericMessagingService.Services.Templating.Services.Formatting
 
         public async Task<string> FormatTemplate(string template, IDictionary<string, string> data)
         {
-            
-            return this.Format(template, data);
+            var compiledTemplate = await GetCompiled(template);
+            return await this.Format(compiledTemplate, data);
         }
 
         protected abstract Task<string> Format(TCompiledTemplate template, IDictionary<string, string> data);
@@ -55,5 +55,12 @@ namespace GenericMessagingService.Services.Templating.Services.Formatting
             return await CompileTemplate(template);
         }
 
+        public async Task Precompile(IEnumerable<string> templates)
+        {
+            if (!settings.Cache) {  return; }
+            foreach (var template in templates) { 
+                await CompileTemplate(template);
+            }
+        }
     }
 }

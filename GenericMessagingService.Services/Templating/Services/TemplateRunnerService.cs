@@ -14,6 +14,7 @@ namespace GenericMessagingService.Services.Templating.Services
     public interface ITemplateRunnerService
     {
         Task<(string Body, string? Subject)?> RunTemplate(string templateName, IDictionary<string, string> data);
+        //Task<List<string>> GetTemplateNames();
     }
     public class TemplateRunnerService : ITemplateRunnerService
     {
@@ -36,5 +37,10 @@ namespace GenericMessagingService.Services.Templating.Services
         {
             return await templateService.GetTemplate(new Types.Template.TemplateRequest { Data = data, TemplateName = templateName });
         }
+
+        //public async Task<List<string>> GetTemplateNames()
+        //{
+        //    return await templateService.GetTemplateNames();
+        //}
     }
 }

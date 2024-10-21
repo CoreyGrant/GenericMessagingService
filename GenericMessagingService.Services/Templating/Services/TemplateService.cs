@@ -3,6 +3,7 @@ using GenericMessagingService.Services.Templating.Services.Formatting;
 using GenericMessagingService.Services.Templating.Services.Location;
 using GenericMessagingService.Types.Config;
 using GenericMessagingService.Types.Template;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace GenericMessagingService.Services.Templating.Services
@@ -10,6 +11,7 @@ namespace GenericMessagingService.Services.Templating.Services
     public interface ITemplateService
     {
         Task<(string Body, string? Subject)?> GetTemplate(TemplateRequest request);
+        //Task<List<string>> GetTemplateNames();
     }
 
     public class TemplateService : ITemplateService
@@ -56,6 +58,11 @@ namespace GenericMessagingService.Services.Templating.Services
             subject = await templateFormattingService.FormatTemplate(subject, request.Data);
             return (body, subject);
         }
+
+        //public async Task<List<string>> GetTemplateNames()
+        //{
+        //    return await templateLocationService.GetTemplateNames();
+        //}
     }
 
     public interface ITemplateServiceFactory

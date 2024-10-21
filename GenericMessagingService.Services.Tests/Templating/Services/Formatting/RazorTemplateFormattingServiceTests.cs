@@ -1,4 +1,5 @@
-﻿using GenericMessagingService.Services.Templating.Services.Formatting;
+﻿using GenericMessagingService.Services.Cache;
+using GenericMessagingService.Services.Templating.Services.Formatting;
 using GenericMessagingService.Types.Config;
 using NSubstitute;
 using RazorEngineCore;
@@ -15,12 +16,17 @@ namespace GenericMessagingService.Services.Tests.Templating.Services.Formatting
     {
         private RazorTemplateFormattingService sut;
         private IRazorEngine razorEngine;
+        private ICacheManager cacheManager;
+        private IHashService hashService;
 
         public RazorTemplateFormattingServiceTests() 
         {
             razorEngine = new RazorEngine();
+            hashService = Substitute.For<IHashService>();
+            cacheManager = Substitute.For<ICacheManager>();
             var config = new RazorTemplateFormattingSettings { };
-            sut = new RazorTemplateFormattingService(config, razorEngine);
+            var templateSettings = new TemplateSettings { };
+            sut = new RazorTemplateFormattingService(templateSettings, config, razorEngine, cacheManager, hashService);
         }
 
         [Fact]
