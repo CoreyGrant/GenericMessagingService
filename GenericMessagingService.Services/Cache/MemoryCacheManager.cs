@@ -9,7 +9,7 @@ namespace GenericMessagingService.Services.Cache
 {
     internal class MemoryCacheManager : ICacheManager
     {
-        private Dictionary<string, Dictionary<string, object>> cache;
+        private Dictionary<string, Dictionary<string, object>> cache = new Dictionary<string, Dictionary<string, object>>();
 
         public async Task<T?> Get<T>(string name, string key) where T : class
         {

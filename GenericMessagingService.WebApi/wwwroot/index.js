@@ -68,6 +68,8 @@
     var tabContent = document.getElementById("tab-content");
     var tabContentTemplate = document.getElementById("tab-content-template");
     var tabContentTemplateRequest = document.getElementById("template-request");
+    var templateRequestGetNames = document.getElementById('template-request-get-names');
+    var templateRequestNames = document.getElementById('template-request-names');
     var tabContentTemplateName = document.getElementById("t-template-name");
     var tabContentTemplateData = document.getElementById("t-template-data");
     var tabContentTemplateSubmit = document.getElementById("template-submit");
@@ -84,6 +86,12 @@
         tabContentTemplateData.value = JSON.stringify(templateObj.templateData, null, 2);
         apiClientInput.value = templateObj.apiKey;
         apiClientInput.onchange();
+    }
+
+    templateRequestGetNames.onclick = function () {
+        apiClient.getTemplateNames().then(names => {
+            templateRequestNames.innerHTML = names.join("<br/>");
+        });
     }
 
     tabContentTemplateSubmit.onclick = function () {

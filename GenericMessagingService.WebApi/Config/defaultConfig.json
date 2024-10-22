@@ -14,6 +14,7 @@
     }
   },
   "template": {
+    "cache":  true,
     "location": {
       "folder": {
         "baseFolder": "RazorTemplates",

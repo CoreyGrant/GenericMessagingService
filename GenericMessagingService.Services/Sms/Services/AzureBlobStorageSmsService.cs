@@ -1,5 +1,4 @@
-﻿using GenericMessagingService.Services.Email;
-using GenericMessagingService.Services.Utils;
+﻿using GenericMessagingService.Services.Utils;
 using GenericMessagingService.Types.Config;
 using System;
 using System.Collections.Generic;
@@ -10,31 +9,31 @@ using System.Threading.Tasks;
 
 namespace GenericMessagingService.Services.Sms.Services
 {
-    internal class FolderSmsService : ISmsService
+    internal class AzureBlobStorageSmsService : ISmsService
     {
-        private readonly FolderSettings settings;
-        private readonly IFileManager fileManager;
+        private readonly AzureBlobStorageSettings settings;
+        private readonly IAzureBlobStorageManager azureBlobStorageManager;
 
-        public FolderSmsService(FolderSettings settings, IFileManager fileManager)
+        public AzureBlobStorageSmsService(
+            AzureBlobStorageSettings settings,
+            IAzureBlobStorageManager azureBlobStorageManager)
         {
             this.settings = settings;
-            this.fileManager = fileManager;
+            this.azureBlobStorageManager = azureBlobStorageManager;
         }
 
         public async Task SendSms(string message, IEnumerable<string> to, string from)
         {
             var fileName = Guid.NewGuid().ToString() + ".txt";
-            var filePath = Path.Join(settings.FolderPath, fileName);
             var fileText = @$"From: {from}
 To: {string.Join(", ", to)}
 Message: {message}";
-            await fileManager.WriteFileAsync(filePath, fileText);
+            await azureBlobStorageManager.StoreFile(fileText, settings.FolderPath, fileName);
         }
 
         public async Task SendSms(Dictionary<string, string> toMessages, string from)
         {
             var fileName = Guid.NewGuid().ToString() + ".txt";
-            var filePath = Path.Join(settings.FolderPath, fileName);
             var fileLines = new List<string> { $"From: {from}" };
 
             foreach (var (to, message) in toMessages)
@@ -42,8 +41,7 @@ Message: {message}";
                 fileLines.Add($"To: {to}");
                 fileLines.Add($"Message: {message}");
             }
-
-            await fileManager.WriteFileAsync(filePath, string.Join("\n", fileLines));
+            await azureBlobStorageManager.StoreFile(string.Join("\n", fileLines), settings.FolderPath, fileName);
         }
     }
 }

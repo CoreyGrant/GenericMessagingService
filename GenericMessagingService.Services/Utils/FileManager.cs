@@ -13,10 +13,12 @@ namespace GenericMessagingService.Services.Utils
     {
         Task<string> GetFileAsync(string path);
         Task WriteFileAsync(string path, string contents);
+        Task WriteFileAsync(string path, Stream contents);
         Stream OpenWrite(string path);
         string[] GetFiles(string folder);
         string[] GetFolders(string folder);
         string[] WalkDirectory(string folder);
+        char PathSeperator { get; }
     }
 
     internal class FileManager : IFileManager
@@ -52,5 +54,15 @@ namespace GenericMessagingService.Services.Utils
             var files = GetFiles(folder);
             return files.Concat(directories.SelectMany(WalkDirectory)).ToArray();
         }
+
+        public async Task WriteFileAsync(string path, Stream contents)
+        {
+            using (var fileStream = File.OpenWrite(path))
+            {
+                contents.CopyTo(fileStream);
+            }
+        }
+
+        public char PathSeperator => Path.DirectorySeparatorChar;
     }
 }

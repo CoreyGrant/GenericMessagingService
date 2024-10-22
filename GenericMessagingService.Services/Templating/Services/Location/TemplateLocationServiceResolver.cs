@@ -85,14 +85,15 @@ namespace GenericMessagingService.Services.Templating.Services.Location
             return (null, null);
         }
 
-        //public async Task<List<string>> GetTemplateNames()
-        //{
-        //    var allTemplateNames = new List<string>();
-        //    foreach (var service in services) {
-        //        allTemplateNames.AddRange(await service.GetTemplateNames());
-        //    }
-        //    return allTemplateNames;
-        //}
+        public async Task<List<string>> GetTemplateNames()
+        {
+            var allTemplateNames = new List<string>();
+            foreach (var service in services)
+            {
+                allTemplateNames.AddRange(await service.GetTemplateNames());
+            }
+            return allTemplateNames;
+        }
     }
 
 

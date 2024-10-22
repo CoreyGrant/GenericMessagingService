@@ -11,7 +11,7 @@ namespace GenericMessagingService.Services.Templating.Services
     public interface ITemplateService
     {
         Task<(string Body, string? Subject)?> GetTemplate(TemplateRequest request);
-        //Task<List<string>> GetTemplateNames();
+        Task<List<string>> GetTemplateNames();
     }
 
     public class TemplateService : ITemplateService
@@ -35,16 +35,18 @@ namespace GenericMessagingService.Services.Templating.Services
 
         public async Task<(string Body, string? Subject)?> GetTemplate(TemplateRequest request)
         {
+            var (template, subject) = ((string)null, (string)null);
             if (templateSettings.Cache)
             {
                 var cachedBody = await cacheManager.Get<string>("template-body", request.TemplateName);
                 var cachedSubject = await cacheManager.Get<string>("template-subject", request.TemplateName);
                 if (!string.IsNullOrEmpty(cachedBody))
                 {
-                    return (cachedBody, cachedSubject);
+                    template = (string)cachedBody;
+                    subject = cachedSubject;
                 }
             }
-            var (template, subject) = await templateLocationService.LocateTemplateAsync(request.TemplateName);
+            (template, subject) = await templateLocationService.LocateTemplateAsync(request.TemplateName);
             if(template == null)
             {
                 return null;
@@ -55,14 +57,17 @@ namespace GenericMessagingService.Services.Templating.Services
                 await cacheManager.Set("template-subject", request.TemplateName, subject);
             }
             var body = await templateFormattingService.FormatTemplate(template, request.Data);
-            subject = await templateFormattingService.FormatTemplate(subject, request.Data);
+            if (subject != null)
+            {
+                subject = await templateFormattingService.FormatTemplate(subject, request.Data);
+            }
             return (body, subject);
         }
 
-        //public async Task<List<string>> GetTemplateNames()
-        //{
-        //    return await templateLocationService.GetTemplateNames();
-        //}
+        public async Task<List<string>> GetTemplateNames()
+        {
+            return await templateLocationService.GetTemplateNames();
+        }
     }
 
     public interface ITemplateServiceFactory
