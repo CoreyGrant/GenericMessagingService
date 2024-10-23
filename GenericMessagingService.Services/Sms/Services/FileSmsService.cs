@@ -1,4 +1,5 @@
 ﻿using GenericMessagingService.Services.Email;
+using GenericMessagingService.Services.StorageService;
 using GenericMessagingService.Services.Utils;
 using GenericMessagingService.Types.Config;
 using System;
@@ -10,31 +11,29 @@ using System.Threading.Tasks;
 
 namespace GenericMessagingService.Services.Sms.Services
 {
-    internal class FolderSmsService : ISmsService
+    internal class FileSmsService : ISmsService
     {
         private readonly FolderSettings settings;
-        private readonly IFileManager fileManager;
+        private readonly IStorageService storageService;
 
-        public FolderSmsService(FolderSettings settings, IFileManager fileManager)
+        public FileSmsService(FolderSettings settings, IStorageService storageService)
         {
             this.settings = settings;
-            this.fileManager = fileManager;
+            this.storageService = storageService;
         }
 
         public async Task SendSms(string message, IEnumerable<string> to, string from)
         {
             var fileName = Guid.NewGuid().ToString() + ".txt";
-            var filePath = Path.Join(settings.FolderPath, fileName);
             var fileText = @$"From: {from}
 To: {string.Join(", ", to)}
 Message: {message}";
-            await fileManager.WriteFileAsync(filePath, fileText);
+            await storageService.StoreFile(fileText, settings.FolderPath, fileName);
         }
 
         public async Task SendSms(Dictionary<string, string> toMessages, string from)
         {
             var fileName = Guid.NewGuid().ToString() + ".txt";
-            var filePath = Path.Join(settings.FolderPath, fileName);
             var fileLines = new List<string> { $"From: {from}" };
 
             foreach (var (to, message) in toMessages)
@@ -43,7 +42,7 @@ Message: {message}";
                 fileLines.Add($"Message: {message}");
             }
 
-            await fileManager.WriteFileAsync(filePath, string.Join("\n", fileLines));
+            await storageService.StoreFile(string.Join("\n", fileLines), settings.FolderPath, fileName);
         }
     }
 }

@@ -4,17 +4,16 @@
     "overrideToAddress": "",
     "defaultFromAddress": "",
     "folder": {
-      "folderPath": "test"
+      "folderPath": "C:\\GTS\\EmailOutput"
     }
   },
   "sms": {
-    "twilio": {
-      "accountSid": "test",
-      "authToken": "test"
+    "folder": {
+      "folderPath": "C:\\GTS\\SmsOutput"
     }
   },
   "template": {
-    "cache":  true,
+    "cache": true,
     "location": {
       "folder": {
         "baseFolder": "RazorTemplates",
@@ -27,38 +26,10 @@
     "formatting": {
       "razor": {}
     }
+  },
+  "pdf": {
+    "folder": {
+      "folderPath": "C:\\GTS\\PdfOutput"
+    }
   }
-  //"comboTemplate": {
-  //  "strategy": "new|legacy",
-  //  "combo": {
-  //    "new": {
-  //      "location": {
-  //        "folder": {
-  //          "baseFolder": "templates",
-  //          "fixed": {},
-  //          "regex": {
-  //            "(^[A-Za-z0-9\\-]+$)":  "{0}.razor"
-  //          }
-  //        }
-  //      },
-  //      "formatting": {
-  //        "razor": {}
-  //      }
-  //    },
-  //    "legacy": {
-  //      "location": {
-  //        "database": {
-  //          "table": "test",
-  //          "connectionString": "test",
-  //          "lookupColumn": "test",
-  //          "templateColumn": "test",
-  //          "subjectColumn": "test"
-  //        }
-  //      },
-  //      "formatting": {
-  //        "basic": {}
-  //      }
-  //    }
-  //  }
-  //}
 }

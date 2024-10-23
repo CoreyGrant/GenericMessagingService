@@ -1,5 +1,6 @@
 ﻿using GenericMessagingService.Services.Templating.Services.Formatting;
 using GenericMessagingService.Services.Templating.Services.Location;
+using GenericMessagingService.Types.Attributes;
 using GenericMessagingService.Types.Config;
 using GenericMessagingService.Types.Template;
 using System;
@@ -58,6 +59,7 @@ namespace GenericMessagingService.Services.Templating.Services
         ITemplateService CreateComboTemplateService(ComboTemplateSettings settings);
     }
 
+    [InjectTransient(ServiceType.Template)]
     public class ComboTemplateServiceFactory : IComboTemplateServiceFactory
     {
         private readonly ITemplateServiceFactory templateServiceFactory;

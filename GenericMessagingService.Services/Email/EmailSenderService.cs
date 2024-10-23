@@ -1,5 +1,6 @@
 ﻿using GenericMessagingService.Services.Email.Services;
 using GenericMessagingService.Services.Templating.Services;
+using GenericMessagingService.Types.Attributes;
 using GenericMessagingService.Types.Config;
 using GenericMessagingService.Types.Email;
 using GenericMessagingService.Types.Template;
@@ -14,6 +15,7 @@ namespace GenericMessagingService.Services.Email
         Task SendEmailAsync(EmailRequest request);
     }
 
+    [InjectTransient(ServiceType.Email)]
     internal class EmailSenderService : IEmailSenderService
     {
         private readonly ITemplateRunnerService templateRunnerService;
@@ -34,7 +36,7 @@ namespace GenericMessagingService.Services.Email
         {
             if (!string.IsNullOrEmpty(request.TemplateName))
             {
-                if (request.Data != null) 
+                if (request.Data != null)
                 {
                     var tr = await this.templateRunnerService.RunTemplate(request.TemplateName, request.Data);
                     if (!tr.HasValue)
@@ -58,7 +60,8 @@ namespace GenericMessagingService.Services.Email
                         template,
                         toAddresses,
                         fromAddress);
-                } else if(request.ToData != null)
+                }
+                else if (request.ToData != null)
                 {
                     var toSubjectBodys = new Dictionary<string, (string, string)>();
                     foreach (var (to, data) in request.ToData)
@@ -75,7 +78,7 @@ namespace GenericMessagingService.Services.Email
                             subject = tr.Value.Subject;
                         }
                         var toAddress = !string.IsNullOrEmpty(emailSettings.OverrideToAddress)
-                           ? emailSettings.OverrideToAddress 
+                           ? emailSettings.OverrideToAddress
                            : to;
                         toSubjectBodys[to] = (subject, template);
                     }
@@ -84,7 +87,10 @@ namespace GenericMessagingService.Services.Email
                         : emailSettings.DefaultFromAddress;
                     await emailService.SendEmailAsync(toSubjectBodys, fromAddress);
                 }
-                throw new System.Exception("Was given a template name but no data");
+                else
+                {
+                    throw new System.Exception("Was given a template name but no data");
+                }
             }
             else
             {

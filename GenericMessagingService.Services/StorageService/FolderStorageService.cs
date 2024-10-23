@@ -19,6 +19,10 @@ namespace GenericMessagingService.Services.StorageService
 
         public async Task StoreFile(Stream file, string location, string path)
         {
+            if (!Directory.Exists(location))
+            {
+                Directory.CreateDirectory(location);
+            }
             await fileManager.WriteFileAsync(Path.Join(location, path), file);
         }
     }

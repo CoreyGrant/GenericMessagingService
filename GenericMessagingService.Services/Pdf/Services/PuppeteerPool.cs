@@ -1,4 +1,5 @@
-﻿using PuppeteerSharp;
+﻿using GenericMessagingService.Types.Attributes;
+using PuppeteerSharp;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -13,6 +14,7 @@ namespace GenericMessagingService.Services.Pdf.Services
         Task<PuppeteerPool.PooledBrowser> GetBrowser();
     }
 
+    [InjectSingleton(ServiceType.Pdf)]
     public class PuppeteerPool : IPuppeteerPool
     {
         private List<PooledBrowser> availableBrowsers = new List<PooledBrowser>();

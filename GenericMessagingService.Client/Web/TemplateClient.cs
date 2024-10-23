@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace GenericMessagingService.Client.Web
 {
-    internal class TemplateClient : BaseClient, ITemplateClient
+    public class TemplateClient : BaseClient, ITemplateClient
     {
         public TemplateClient(WebClientSettings settings, IClassToDictionaryConverter converter) : base(settings, converter)
         {

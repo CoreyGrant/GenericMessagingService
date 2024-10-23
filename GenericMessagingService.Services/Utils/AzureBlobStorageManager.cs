@@ -1,4 +1,5 @@
 ﻿using Azure.Storage.Blobs;
+using GenericMessagingService.Types.Attributes;
 using GenericMessagingService.Types.Config;
 using System;
 using System.Collections.Generic;
@@ -18,10 +19,10 @@ namespace GenericMessagingService.Services.Utils
 
     public class AzureBlobStorageManager : IAzureBlobStorageManager
     {
-        private readonly AzureBloblStorageSettings settings;
+        private readonly AzureBlobStorageSettings settings;
         private readonly BlobContainerClient client;
 
-        public AzureBlobStorageManager(AzureBloblStorageSettings settings)
+        public AzureBlobStorageManager(AzureBlobStorageSettings settings)
         {
             this.settings = settings;
             this.client = new BlobContainerClient(settings.ConnectionString, settings.ContainerName);
@@ -53,7 +54,20 @@ namespace GenericMessagingService.Services.Utils
                 sw.Write(file);
                 var response = await this.client.UploadBlobAsync(fullFileName, fileStream);
             }
-            
+        }
+    }
+
+    public interface IAzureBlobStorageManagerFactory
+    {
+        IAzureBlobStorageManager Create(AzureBlobStorageSettings settings);
+    }
+
+    [InjectTransient]
+    public class AzureBlobStorageManagerFactory : IAzureBlobStorageManagerFactory
+    {
+        public IAzureBlobStorageManager Create(AzureBlobStorageSettings settings)
+        {
+            return new AzureBlobStorageManager(settings);
         }
     }
 }

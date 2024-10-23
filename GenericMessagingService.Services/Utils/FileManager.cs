@@ -1,4 +1,5 @@
-﻿using Org.BouncyCastle.Asn1;
+﻿using GenericMessagingService.Types.Attributes;
+using Org.BouncyCastle.Asn1;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -21,6 +22,7 @@ namespace GenericMessagingService.Services.Utils
         char PathSeperator { get; }
     }
 
+    [InjectTransient]
     internal class FileManager : IFileManager
     {
         public async Task<string> GetFileAsync(string path)

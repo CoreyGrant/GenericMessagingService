@@ -1,4 +1,5 @@
-﻿using Org.BouncyCastle.Crypto.Engines;
+﻿using GenericMessagingService.Types.Attributes;
+using Org.BouncyCastle.Crypto.Engines;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace GenericMessagingService.Services.Cache
 {
+    [InjectSingleton]
     internal class MemoryCacheManager : ICacheManager
     {
         private Dictionary<string, Dictionary<string, object>> cache = new Dictionary<string, Dictionary<string, object>>();

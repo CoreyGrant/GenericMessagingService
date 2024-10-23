@@ -1,6 +1,7 @@
 ﻿using GenericMessagingService.Services.Cache;
 using GenericMessagingService.Services.Templating.Database;
 using GenericMessagingService.Services.Utils;
+using GenericMessagingService.Types.Attributes;
 using GenericMessagingService.Types.Config;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,7 @@ namespace GenericMessagingService.Services.Templating.Services.Location
         ITemplateLocationService Resolve(TemplateLocationSettings settings);
     }
 
+    [InjectTransient(ServiceType.Template)]
     public class TemplateLocationServiceResolver : ITemplateLocationServiceResolver
     {
         private readonly IDatabaseStrategyResolver databaseStrategyResolver;

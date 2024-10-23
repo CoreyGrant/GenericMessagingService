@@ -8,6 +8,7 @@ namespace GenericMessagingService.Types.Config
 {
     public class EmailSettings
     {
+        public string? TemplateStrategy { get; set; }
         public string? OverrideToAddress { get; set; }
         public string? DefaultFromAddress { get; set; }
         /// <summary>
@@ -18,6 +19,7 @@ namespace GenericMessagingService.Types.Config
         public MailChimpSettings? MailChimp { get; set; }
         public SendGridSettings? SendGrid { get; set; }
         public FolderSettings? Folder { get; set; }
+        public AzureBlobStorageSettings? AzureBlobStorage { get; set; }
         
     }
 

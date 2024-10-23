@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace GenericMessagingService.Client.Web
 {
-    internal class SmsClient : BaseClient, ISmsClient
+    public class SmsClient : BaseClient, ISmsClient
     {
         public SmsClient(WebClientSettings settings, IClassToDictionaryConverter converter) : base(settings, converter)
         {

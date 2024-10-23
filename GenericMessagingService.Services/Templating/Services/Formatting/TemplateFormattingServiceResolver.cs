@@ -1,4 +1,5 @@
 ﻿using GenericMessagingService.Services.Cache;
+using GenericMessagingService.Types.Attributes;
 using GenericMessagingService.Types.Config;
 using RazorEngineCore;
 using System;
@@ -14,6 +15,7 @@ namespace GenericMessagingService.Services.Templating.Services.Formatting
         ITemplateFormattingService Resolve(TemplateSettings settings);
     }
 
+    [InjectTransient(ServiceType.Template)]
     public class TemplateFormattingServiceResolver : ITemplateFormattingServiceResolver
     {
         private readonly IRazorEngine razorEngine;

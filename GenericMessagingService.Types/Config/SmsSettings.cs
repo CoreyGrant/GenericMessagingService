@@ -8,10 +8,12 @@ namespace GenericMessagingService.Types.Config
 {
     public class SmsSettings
     {
+        public string? TemplateStrategy { get; set; }
         public string? OverrideToNumber { get; set; }
         public string? DefaultFromNumber { get; set; }
         public TwilioSettings Twilio { get; set; }
         public FolderSettings Folder { get; set; }
+        public AzureBlobStorageSettings AzureBlobStorage { get; set; }
     }
 
     public class TwilioSettings

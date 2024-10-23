@@ -1,6 +1,8 @@
 ﻿using GenericMessagingService.Services.Pdf.Services;
+using GenericMessagingService.Services.StorageService;
 using GenericMessagingService.Services.Templating.Services;
 using GenericMessagingService.Services.Utils;
+using GenericMessagingService.Types.Attributes;
 using GenericMessagingService.Types.Config;
 using GenericMessagingService.Types.Pdf;
 using System;
@@ -14,37 +16,56 @@ namespace GenericMessagingService.Services.Pdf
 {
     public interface IPdfGenerationService
     {
-        Task<Stream> GetPdf(PdfRequest request);
+        Task<byte[]> GetPdf(string templateName, IDictionary<string, string> data, string filename);
     }
 
+    [InjectTransient(ServiceType.Pdf)]
     internal class PdfGenerationService : IPdfGenerationService
     {
         private readonly PdfSettings pdfSettings;
         private readonly IPuppeteerService puppeteerService;
         private readonly ITemplateRunnerService templateRunnerService;
+        private readonly IAzureBlobStorageServiceFactory azureBlobStorageServiceFactory;
+        private readonly IFileManager fileManager;
+        private readonly IStorageService storageService;
+        private readonly string folderPath;
 
         public PdfGenerationService(
             PdfSettings pdfSettings,
             IPuppeteerService puppeteerService,
-            ITemplateRunnerService templateRunnerService) 
+            ITemplateRunnerService templateRunnerService,
+            IAzureBlobStorageServiceFactory azureBlobStorageServiceFactory,
+            IFileManager fileManager) 
         {
             this.pdfSettings = pdfSettings;
             this.puppeteerService = puppeteerService;
             this.templateRunnerService = templateRunnerService;
-            this.azureBlobStorageManager = new AzureBlobStorageManager(pdfSettings.AzureBlobStorage);
+            this.azureBlobStorageServiceFactory = azureBlobStorageServiceFactory;
+            this.fileManager = fileManager;
+            if (pdfSettings.AzureBlobStorage != null)
+            {
+                this.storageService = azureBlobStorageServiceFactory.Create(pdfSettings.AzureBlobStorage);
+                this.folderPath = pdfSettings.AzureBlobStorage.FolderPath;
+            } else if (pdfSettings.Folder != null)
+            {
+                this.storageService = new FolderStorageService(fileManager);
+                this.folderPath = pdfSettings.Folder.FolderPath;
+            }
         }
 
-        public async Task<Stream> GetPdf(PdfRequest request)
+        public async Task<byte[]> GetPdf(string templateName, IDictionary<string, string> data, string filename)
         {
-            var result = await templateRunnerService.RunTemplate(request.TemplateName, request.Data);
+            var result = await templateRunnerService.RunTemplate(templateName, data);
             if(!result.HasValue)
             {
-                throw new Exception("Failed to run template for name " + request.TemplateName);
+                throw new Exception("Failed to run template for name " + templateName);
             }
-            var pdfStream = await puppeteerService.GetPdfStream(result.Value.Body);
-            if(pdfSettings.AzureBlobStorage != null)
+            var pdfBytes = await puppeteerService.GetPdfBytes(result.Value.Body);
+            if(this.storageService != null)
             {
+                await this.storageService.StoreFile(pdfBytes, folderPath, filename);
             }
+            return pdfBytes;
         }
     }
 }

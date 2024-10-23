@@ -1,4 +1,6 @@
 ﻿using GenericMessagingService.Services.Utils;
+using GenericMessagingService.Types.Attributes;
+using GenericMessagingService.Types.Config;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -20,6 +22,27 @@ namespace GenericMessagingService.Services.StorageService
         public async Task StoreFile(Stream file, string location, string path)
         {
             await manager.StoreFile(file, location, path);
+        }
+    }
+
+    public interface IAzureBlobStorageServiceFactory
+    {
+        IStorageService Create(AzureBlobStorageSettings settings);
+    }
+
+    [InjectTransient]
+    public class AzureBlobStorageServiceFactory : IAzureBlobStorageServiceFactory
+    {
+        private readonly IAzureBlobStorageManagerFactory managerFactory;
+
+        public AzureBlobStorageServiceFactory(IAzureBlobStorageManagerFactory managerFactory)
+        {
+            this.managerFactory = managerFactory;
+        }
+
+        public IStorageService Create(AzureBlobStorageSettings settings)
+        {
+            return new AzureBlobStorageService(managerFactory.Create(settings));
         }
     }
 }

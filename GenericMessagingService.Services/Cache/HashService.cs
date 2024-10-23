@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GenericMessagingService.Types.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,7 @@ namespace GenericMessagingService.Services.Cache
         string GetHash(string str);
     }
 
+    [InjectTransient]
     public class HashSerice : IHashService
     {
         private readonly FastHashes.FastHash64 hash;

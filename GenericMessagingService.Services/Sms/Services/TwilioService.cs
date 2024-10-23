@@ -1,4 +1,5 @@
-﻿using GenericMessagingService.Types.Config;
+﻿using GenericMessagingService.Types.Attributes;
+using GenericMessagingService.Types.Config;
 using System;
 using System.Collections.Generic;
 using System.Linq;

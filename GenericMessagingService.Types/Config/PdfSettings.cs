@@ -8,7 +8,7 @@ namespace GenericMessagingService.Types.Config
 {
     public class PdfSettings
     {
-        // need a way to specify where to store the output
+        public string? TemplateStrategy { get; set; }
         public FolderSettings? Folder { get; set; }
         public AzureBlobStorageSettings? AzureBlobStorage { get; set; }
     }

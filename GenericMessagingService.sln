@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GenericMessagingService.Cli
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericMessagingService.WebApi.Tests", "GenericMessagingService.WebApi.Tests\GenericMessagingService.WebApi.Tests.csproj", "{ADEADB4E-7530-4894-AA78-42BFB992C601}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericMessagingService.IntegrationTests", "GenericMessagingService.IntegrationTests\GenericMessagingService.IntegrationTests.csproj", "{637F2761-4B08-4C42-9165-012249452D4B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{ADEADB4E-7530-4894-AA78-42BFB992C601}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ADEADB4E-7530-4894-AA78-42BFB992C601}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ADEADB4E-7530-4894-AA78-42BFB992C601}.Release|Any CPU.Build.0 = Release|Any CPU
+		{637F2761-4B08-4C42-9165-012249452D4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{637F2761-4B08-4C42-9165-012249452D4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{637F2761-4B08-4C42-9165-012249452D4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{637F2761-4B08-4C42-9165-012249452D4B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

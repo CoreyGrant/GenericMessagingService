@@ -1,5 +1,7 @@
 ﻿using GenericMessagingService.Services.Email.Services;
+using GenericMessagingService.Services.StorageService;
 using GenericMessagingService.Services.Utils;
+using GenericMessagingService.Types.Attributes;
 using GenericMessagingService.Types.Config;
 using SendGrid;
 using System;
@@ -15,22 +17,24 @@ namespace GenericMessagingService.Services.Email
         IEmailService Resolve();
     }
 
+    [InjectTransient(ServiceType.Email)]
     internal class EmailStrategyResolver : IEmailStrategyResolver
     {
         private readonly EmailSettings settings;
         private readonly ISendGridClient sendGridClient;
         private readonly IFileManager fileManager;
-        private SendGridEmailService sendGridEmailService;
-        private FolderEmailService folderEmailService;
+        private readonly IAzureBlobStorageServiceFactory azureBlobStorageServiceFactory;
 
         public EmailStrategyResolver(
             EmailSettings settings,
             ISendGridClient sendGridClient,
-            IFileManager fileManager) 
+            IFileManager fileManager,
+            IAzureBlobStorageServiceFactory azureBlobStorageServiceFactory) 
         {
             this.settings = settings;
             this.sendGridClient = sendGridClient;
             this.fileManager = fileManager;
+            this.azureBlobStorageServiceFactory = azureBlobStorageServiceFactory;
         }
 
         public IEmailService Resolve() 
@@ -43,10 +47,13 @@ namespace GenericMessagingService.Services.Email
                 
             } else if(settings.SendGrid != null)
             {
-                return sendGridEmailService ??= new SendGridEmailService(settings.SendGrid, sendGridClient);
+                return new SendGridEmailService(settings.SendGrid, sendGridClient);
             } else if(settings.Folder != null)
             {
-                return folderEmailService ??= new FolderEmailService(settings.Folder, fileManager);
+                return new FileEmailService(settings.Folder, new FolderStorageService(fileManager));
+            } else if(settings.AzureBlobStorage != null)
+            {
+                return new FileEmailService(settings.AzureBlobStorage, azureBlobStorageServiceFactory.Create(settings.AzureBlobStorage));
             }
             throw new Exception("Email client was not configured");
         }

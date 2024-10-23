@@ -1,6 +1,7 @@
 ﻿using GenericMessagingService.Services.Templating.Database;
 using GenericMessagingService.Services.Templating.Services.Formatting;
 using GenericMessagingService.Services.Templating.Services.Location;
+using GenericMessagingService.Types.Attributes;
 using GenericMessagingService.Types.Config;
 using RazorEngineCore;
 using System;
@@ -16,6 +17,8 @@ namespace GenericMessagingService.Services.Templating.Services
         Task<(string Body, string? Subject)?> RunTemplate(string templateName, IDictionary<string, string> data);
         Task<List<string>> GetTemplateNames();
     }
+
+    [InjectTransient(ServiceType.Template)]
     public class TemplateRunnerService : ITemplateRunnerService
     {
         private ITemplateService templateService;

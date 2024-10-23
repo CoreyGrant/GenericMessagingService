@@ -12,5 +12,6 @@ namespace GenericMessagingService.Types.Config
         public SmsSettings? Sms { get; set; }
         public TemplateSettings? Template { get; set; }
         public ComboTemplateSettings? ComboTemplate { get; set; }
+        public PdfSettings Pdf { get; set; }
     }
 }

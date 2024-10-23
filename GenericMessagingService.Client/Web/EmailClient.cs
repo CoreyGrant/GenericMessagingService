@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace GenericMessagingService.Client.Web
 {
-    internal class EmailClient : BaseClient, IEmailClient
+    public class EmailClient : BaseClient, IEmailClient
     {
         public EmailClient(WebClientSettings settings, IClassToDictionaryConverter converter) : base(settings, converter) { }
 

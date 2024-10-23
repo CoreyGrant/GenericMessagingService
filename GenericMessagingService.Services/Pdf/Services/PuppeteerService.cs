@@ -1,4 +1,5 @@
-﻿using PuppeteerSharp;
+﻿using GenericMessagingService.Types.Attributes;
+using PuppeteerSharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,6 +15,7 @@ namespace GenericMessagingService.Services.Pdf.Services
         Task<Stream> GetPdfStream(string template);
     }
 
+    [InjectTransient(ServiceType.Pdf)]
     internal class PuppeteerService : IPuppeteerService
     {
         private readonly IPuppeteerPool puppeteerPool;

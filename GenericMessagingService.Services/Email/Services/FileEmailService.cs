@@ -1,4 +1,5 @@
-﻿using GenericMessagingService.Services.Utils;
+﻿using GenericMessagingService.Services.StorageService;
+using GenericMessagingService.Services.Utils;
 using GenericMessagingService.Types.Config;
 using Newtonsoft.Json;
 using System;
@@ -10,15 +11,15 @@ using System.Threading.Tasks;
 
 namespace GenericMessagingService.Services.Email.Services
 {
-    internal class AzureBlobStorageEmailService : IEmailService
+    internal class FileEmailService : IEmailService
     {
-        private readonly AzureBlobStorageSettings settings;
-        private readonly IAzureBlobStorageManager azureBlobStorageManager;
+        private readonly FolderSettings settings;
+        private readonly IStorageService storageService;
 
-        public AzureBlobStorageEmailService(AzureBlobStorageSettings settings, IAzureBlobStorageManager azureBlobStorageManager)
+        public FileEmailService(FolderSettings settings, IStorageService storageService)
         {
             this.settings = settings;
-            this.azureBlobStorageManager = azureBlobStorageManager;
+            this.storageService = storageService;
         }
         public async Task SendEmailAsync(string subject, string body, IEnumerable<string> to, string from)
         {
@@ -44,7 +45,7 @@ namespace GenericMessagingService.Services.Email.Services
                 using(var stream = new MemoryStream())
                 {
                     email.Save(stream);
-                    await this.azureBlobStorageManager.StoreFile(stream, settings.FolderPath, fileName);
+                    await storageService.StoreFile(stream, settings.FolderPath, fileName);
                 }
                 
             }
@@ -52,30 +53,25 @@ namespace GenericMessagingService.Services.Email.Services
 
         public async Task SendEmailAsync(Dictionary<string, (string, string)> toSubjectBody, string from)
         {
-            var tasks = new List<Task>();
             foreach(var (to, (subject, body)) in toSubjectBody)
             {
-                var task = Task.Run(async () =>
+                var fileName = Guid.NewGuid().ToString() + ".msg";
+                using (var email = new MsgKit.Email(
+                new MsgKit.Sender(from, from),
+                new MsgKit.Representing(from, from),
+                subject))
                 {
-                    var fileName = Guid.NewGuid().ToString() + ".msg";
-                    using (var email = new MsgKit.Email(
-                    new MsgKit.Sender(from, from),
-                    new MsgKit.Representing(from, from),
-                    subject))
+                    email.Subject = subject;
+                    email.BodyHtml = body;
+                    email.Recipients.AddTo(to);
+                    using (var stream = new MemoryStream())
                     {
-                        email.Subject = subject;
-                        email.BodyHtml = body;
-                        email.Recipients.AddTo(to);
-                        using (var stream = new MemoryStream())
-                        {
-                            email.Save(stream);
-                            await this.azureBlobStorageManager.StoreFile(stream, settings.FolderPath, fileName);
-                        }
+                        email.Save(stream);
+                        await storageService.StoreFile(stream, settings.FolderPath, fileName);
                     }
-                });
-                tasks.Add(task);
+                }
             }
-            await Task.WhenAll(tasks);
+            
         }
     }
 }

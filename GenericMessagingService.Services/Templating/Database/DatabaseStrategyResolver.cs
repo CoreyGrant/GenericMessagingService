@@ -1,4 +1,5 @@
-﻿using GenericMessagingService.Types.Config;
+﻿using GenericMessagingService.Types.Attributes;
+using GenericMessagingService.Types.Config;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,7 @@ namespace GenericMessagingService.Services.Templating.Database
     /// <summary>
     /// Different databases can be configured
     /// </summary>
+    [InjectTransient(ServiceType.Template)]
     public class DatabaseStrategyResolver : IDatabaseStrategyResolver
     {
         public DatabaseStrategyResolver() 

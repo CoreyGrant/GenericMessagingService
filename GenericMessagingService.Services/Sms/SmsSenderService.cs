@@ -1,5 +1,6 @@
 ﻿using GenericMessagingService.Services.Sms.Services;
 using GenericMessagingService.Services.Templating.Services;
+using GenericMessagingService.Types.Attributes;
 using GenericMessagingService.Types.Config;
 using GenericMessagingService.Types.Sms;
 using GenericMessagingService.Types.Template;
@@ -13,6 +14,7 @@ namespace GenericMessagingService.Services.Sms
         Task SendSmsAsync(SmsRequest request);
     }
 
+    [InjectTransient(ServiceType.Sms)]
     internal class SmsSenderService : ISmsSenderService
     {
         private readonly SmsSettings settings;

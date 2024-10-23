@@ -1,6 +1,7 @@
 ﻿using GenericMessagingService.Services.Cache;
 using GenericMessagingService.Services.Templating.Services.Formatting;
 using GenericMessagingService.Services.Templating.Services.Location;
+using GenericMessagingService.Types.Attributes;
 using GenericMessagingService.Types.Config;
 using GenericMessagingService.Types.Template;
 using System.Collections.Generic;
@@ -75,6 +76,7 @@ namespace GenericMessagingService.Services.Templating.Services
         ITemplateService CreateTemplateService(TemplateSettings templateSettings);
     }
 
+    [InjectTransient(ServiceType.Template)]
     public class TemplateServiceFactory : ITemplateServiceFactory
     {
         private readonly ITemplateLocationServiceResolver templateLocationServiceResolver;

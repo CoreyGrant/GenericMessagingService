@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace GenericMessagingService.Client.Web
 {
-    internal abstract class BaseClient : IBaseClient
+    public abstract class BaseClient : IBaseClient
     {
         private readonly WebClientSettings settings;
         protected readonly IClassToDictionaryConverter converter;
