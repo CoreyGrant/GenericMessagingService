@@ -21,7 +21,7 @@ namespace GenericMessagingService.IntegrationTests.Tests.Email
             var toEmailAddress = "test@test.com";
             var fromEmailAddress = "test@testsender.com";
             var templateName = "Test1";
-            var data = new Dictionary<string, string>();
+            var data = new Dictionary<string, string> { ["TestData"] = "EmailTest"};
             EmailClient.SendTemplateEmail(toEmailAddress, templateName, data, fromEmailAddress).Wait();
         }
     }

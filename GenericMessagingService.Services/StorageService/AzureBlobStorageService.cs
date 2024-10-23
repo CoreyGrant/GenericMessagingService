@@ -19,7 +19,7 @@ namespace GenericMessagingService.Services.StorageService
             this.manager = manager;
         }
 
-        public async Task StoreFile(Stream file, string location, string path)
+        public async Task StoreFile(MemoryStream file, string location, string path)
         {
             await manager.StoreFile(file, location, path);
         }

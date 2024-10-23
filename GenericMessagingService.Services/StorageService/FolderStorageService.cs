@@ -17,7 +17,7 @@ namespace GenericMessagingService.Services.StorageService
             this.fileManager = fileManager;
         }
 
-        public async Task StoreFile(Stream file, string location, string path)
+        public async Task StoreFile(MemoryStream file, string location, string path)
         {
             if (!Directory.Exists(location))
             {

@@ -11,7 +11,7 @@ namespace GenericMessagingService.Services.Pdf.Services
 {
     public interface IPuppeteerPool
     {
-        Task<PuppeteerPool.PooledBrowser> GetBrowser();
+        Task<PuppeteerPool.PooledBrowser> GetBrowser(string chromeExePath);
     }
 
     [InjectSingleton(ServiceType.Pdf)]
@@ -21,7 +21,7 @@ namespace GenericMessagingService.Services.Pdf.Services
         private List<PooledBrowser> takenBrowsers = new List<PooledBrowser>();
         private int currentBrowserCount => availableBrowsers.Count + takenBrowsers.Count;
 
-        public async Task<PooledBrowser> GetBrowser()
+        public async Task<PooledBrowser> GetBrowser(string chromeExePath)
         {
             if (availableBrowsers.Any())
             {
@@ -30,7 +30,7 @@ namespace GenericMessagingService.Services.Pdf.Services
                 takenBrowsers.Add(browser);
                 return browser;
             }
-            var newBrowser = await StartBrowserAsync();
+            var newBrowser = await StartBrowserAsync(chromeExePath);
             takenBrowsers.Add(newBrowser);
             return newBrowser;
         }
@@ -41,10 +41,11 @@ namespace GenericMessagingService.Services.Pdf.Services
             availableBrowsers.Add(browser);
         }
 
-        private async Task<PooledBrowser> StartBrowserAsync()
+        private async Task<PooledBrowser> StartBrowserAsync(string chromeExePath)
         {
             var browser = await Puppeteer.LaunchAsync(new LaunchOptions
             {
+                ExecutablePath = chromeExePath,
                 Headless = true
             });
             return new PooledBrowser(this, browser);

@@ -9,6 +9,7 @@ namespace GenericMessagingService.Types.Config
     public class PdfSettings
     {
         public string? TemplateStrategy { get; set; }
+        public string ChromeExePath { get; set; }
         public FolderSettings? Folder { get; set; }
         public AzureBlobStorageSettings? AzureBlobStorage { get; set; }
     }

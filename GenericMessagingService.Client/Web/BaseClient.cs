@@ -49,6 +49,16 @@ namespace GenericMessagingService.Client.Web
             }
         }
 
+        protected async Task<HttpResponseMessage> PostWithRawResponse<T>(string url, T data) where T : class
+        {
+            var client = GetHttpClient();
+            var response = await client.PostAsJsonAsync(url, data);
+            if (!response.IsSuccessStatusCode)
+            {
+            }
+            return response;
+        }
+
         protected async Task<V> Post<T, V>(string url, T data) where T : class where V : class
         {
             var client = GetHttpClient();

@@ -25,6 +25,8 @@ namespace GenericMessagingService.IntegrationTests.Tests
 
         protected IEmailClient EmailClient => new EmailClient(clientSettings, classToDictConverter);
         protected ISmsClient SmsClient => new SmsClient(clientSettings, classToDictConverter);
+
+        protected IPdfClient PdfClient => new PdfClient(clientSettings, classToDictConverter);
         protected ITemplateClient TemplateClient => new TemplateClient(clientSettings, classToDictConverter);
     }
 }

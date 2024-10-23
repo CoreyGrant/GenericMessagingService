@@ -1,4 +1,5 @@
 ﻿using GenericMessagingService.Types.Attributes;
+using GenericMessagingService.Types.Config;
 using PuppeteerSharp;
 using System;
 using System.Collections.Generic;
@@ -19,10 +20,12 @@ namespace GenericMessagingService.Services.Pdf.Services
     internal class PuppeteerService : IPuppeteerService
     {
         private readonly IPuppeteerPool puppeteerPool;
+        private readonly PdfSettings settings;
 
-        public PuppeteerService(IPuppeteerPool puppeteerPool)
+        public PuppeteerService(IPuppeteerPool puppeteerPool, PdfSettings settings)
         {
             this.puppeteerPool = puppeteerPool;
+            this.settings = settings;
         }
 
         public async Task<byte[]> GetPdfBytes(string template)
@@ -37,9 +40,10 @@ namespace GenericMessagingService.Services.Pdf.Services
 
         private async Task<T> GetPdfOutput<T>(string template, Func<IPage, Task<T>> getOutput)
         {
-            var browser = await puppeteerPool.GetBrowser();
+            var browser = await puppeteerPool.GetBrowser(settings.ChromeExePath);
             var puppet = browser.Browser;
             var page = await puppet.NewPageAsync();
+            await page.SetContentAsync(template);
             var output = await getOutput(page);
             browser.Dispose();
             return output;

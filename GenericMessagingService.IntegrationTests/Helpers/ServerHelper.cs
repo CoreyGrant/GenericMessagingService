@@ -1,6 +1,7 @@
 ﻿using GenericMessagingService.Client;
 using GenericMessagingService.WebApi;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,10 +25,10 @@ namespace GenericMessagingService.IntegrationTests.Helpers
         public Server(GenericMessagingServiceSettings settings, string hostUrl)
         {
             var builder = WebApplication.CreateBuilder();
-            
+
+            builder.Logging.ClearProviders();
             // Add services to the container.
             builder.Services.AddWebApi(settings);
-
             // Build the application
             app = builder.Build();
 

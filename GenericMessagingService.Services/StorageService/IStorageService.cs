@@ -18,13 +18,12 @@ namespace GenericMessagingService.Services.StorageService
                 return this.StoreFile(stream, location, path);
             }
         }
-        public Task StoreFile(Stream file, string location, string path);
+        public Task StoreFile(MemoryStream file, string location, string path);
         public Task StoreFile(byte[] file, string location, string path)
         {
             using (var stream = new MemoryStream())
-            using (var sw = new StreamWriter(stream))
             {
-                sw.Write(file);
+                stream.Write(file);
                 return this.StoreFile(stream, location, path);
             }
         }

@@ -249,9 +249,9 @@ namespace GenericMessagingService.WebApi
                             : pdfRequest.Filename;
                         var pdfBytes = await pdfGenerationService.GetPdf(pdfRequest.TemplateName, pdfRequest.Data, filename);
 
-                        await res.BodyWriter.WriteAsync(pdfBytes);
                         res.Headers.ContentType = "application/pdf";
                         res.Headers.ContentDisposition = filename;
+                        await res.BodyWriter.WriteAsync(pdfBytes);
                     }
                     catch (Exception ex)
                     {

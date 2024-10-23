@@ -14,7 +14,7 @@ namespace GenericMessagingService.Services.Utils
     {
         Task<string> GetFileAsync(string path);
         Task WriteFileAsync(string path, string contents);
-        Task WriteFileAsync(string path, Stream contents);
+        Task WriteFileAsync(string path, MemoryStream contents);
         Stream OpenWrite(string path);
         string[] GetFiles(string folder);
         string[] GetFolders(string folder);
@@ -57,11 +57,12 @@ namespace GenericMessagingService.Services.Utils
             return files.Concat(directories.SelectMany(WalkDirectory)).ToArray();
         }
 
-        public async Task WriteFileAsync(string path, Stream contents)
+        public async Task WriteFileAsync(string path, MemoryStream contents)
         {
-            using (var fileStream = File.OpenWrite(path))
+            using(var br = new BinaryReader(contents))
             {
-                contents.CopyTo(fileStream);
+                var bytes = contents.ToArray();
+                File.WriteAllBytes(path, bytes);
             }
         }
 

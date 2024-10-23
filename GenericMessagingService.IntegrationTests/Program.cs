@@ -25,7 +25,9 @@ namespace GenericMessagingService.IntegrationTests
         public static void Main(string[] args)
         {
             settings = ParseArgs(args);
-            Logger = new ConsoleLogger();
+            Logger = new ComboLogger(
+                new ConsoleLogger(),
+                new FileLogger("C:\\GMSTests\\Log\\logfile.txt"));
             DiscoverServers();
             var tests = DiscoverTests();
             RunTests(tests).Wait();
@@ -110,6 +112,8 @@ namespace GenericMessagingService.IntegrationTests
 
         private static async Task RunTests(Dictionary<string, Dictionary<string, MethodInfo>> tests)
         {
+            Logger.Log("Starting test run");
+            Logger.Log("");
             foreach(var (serverName, testMethods) in tests)
             {
                 Logger.Log($"Running tests for {serverName}");
@@ -123,6 +127,7 @@ namespace GenericMessagingService.IntegrationTests
                     Logger.Log("Server start failed");
                     Logger.Log(ex.Message);
                     Logger.Log(ex.StackTrace);
+                    continue;
                 }
                 Logger.Log("Server started");
                 Logger.Log("");
@@ -130,6 +135,7 @@ namespace GenericMessagingService.IntegrationTests
                 {
                     await RunTest(testName, method);
                 }
+                await server.DisposeAsync();
             }
         }
 
