@@ -2,10 +2,14 @@
 using GenericMessagingService.IntegrationTests.Attributes;
 using GenericMessagingService.IntegrationTests.Helpers;
 using GenericMessagingService.IntegrationTests.Servers;
+using GenericMessagingService.IntegrationTests.Tests;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Console;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -19,15 +23,17 @@ namespace GenericMessagingService.IntegrationTests
     /// </summary>
     public class Program
     {
+        private static ILoggerProvider loggerProvider;
         private static ILogger Logger;
         private static IntegrationTestSettings settings;
 
         public static void Main(string[] args)
         {
+            var logger = LoggerFactory.Create(x => x.AddTestLogging("C:\\GMSTests\\Log")).CreateLogger("Test");
+            Logger = logger;
+            ServerHelper.logger = logger;
+
             settings = ParseArgs(args);
-            Logger = new ComboLogger(
-                new ConsoleLogger(),
-                new FileLogger("C:\\GMSTests\\Log\\logfile.txt"));
             DiscoverServers();
             var tests = DiscoverTests();
             RunTests(tests).Wait();
@@ -61,6 +67,13 @@ namespace GenericMessagingService.IntegrationTests
                     settings.ApiKey = args[i];
                 }
             }
+            if (args.Any())
+            {
+                Logger.LogDebug("Running Integration Tests with args: " + string.Join(" ", args));
+            } else
+            {
+                Logger.LogDebug("Running Integration Tests with no args");
+            }
             return settings;
         }
 
@@ -68,11 +81,15 @@ namespace GenericMessagingService.IntegrationTests
         {
             var assembly = Assembly.GetExecutingAssembly();
             var types = assembly.GetTypes()
-                .Where(x => x.GetCustomAttribute<TestAttribute>() != null);
+                .Where(x => x.GetCustomAttribute<TestFixtureAttribute>() != null);
             var typeDict = new Dictionary<string, List<Type>>();
             foreach (var type in types)
             {
-                var serverName = type.GetCustomAttribute<TestAttribute>().ServerName;
+                var serverName = type.GetCustomAttribute<TestFixtureAttribute>().ServerName;
+                if(settings.Names != null && !settings.Names.Contains(serverName))
+                {
+                    continue;
+                }
                 if (!typeDict.ContainsKey(serverName))
                 {
                     typeDict[serverName] = new List<Type>();
@@ -81,15 +98,24 @@ namespace GenericMessagingService.IntegrationTests
                 if (!testObjectCache.ContainsKey(type))
                 {
                     var server = servers[serverName];
-                    testObjectCache[type] = type.GetConstructors()[0].Invoke(new object[] {Logger, server.WebClientSettings});
+                    var testBase = (TestBase)type.GetConstructors()[0].Invoke(new object[] { });
+                    testBase.logger = Logger;
+                    testBase.clientSettings = server.WebClientSettings;
+                    testBase.gmsSettings = server.Settings;
+
+                    testObjectCache[type] = testBase;
                 }
             }
             var tests = typeDict
                 .ToDictionary(
                     x => x.Key,
-                    x => x.Value.SelectMany(t => t.GetMethods().Where( m => m.GetCustomAttribute<TestNameAttribute>() != null))
+                    x => x.Value.SelectMany(t => t.GetMethods().Where( m => m.GetCustomAttribute<TestAttribute>() != null))
                         .ToDictionary(
-                            m => m.GetCustomAttribute<TestNameAttribute>().Name,
+                            m => {
+                                var fixtureName = m.DeclaringType.GetCustomAttribute<TestFixtureAttribute>()!.TestFixtureName ?? m.DeclaringType.Name;
+                                var testName = m.GetCustomAttribute<TestAttribute>()!.TestName ?? m.Name;
+                                return fixtureName + ":" + testName;
+                            },
                             m => m));
             return tests;
         }
@@ -102,7 +128,10 @@ namespace GenericMessagingService.IntegrationTests
             foreach (var type in types) 
             {
                 var serverName = type.GetCustomAttribute<ServerAttribute>().Name;
-                servers[serverName] = (BaseServer)type.GetConstructors()[0].Invoke(new object[] { settings.HostUrl, settings.ApiKey });
+                var server = (BaseServer)type.GetConstructors()[0].Invoke(new object[0]);
+                server.hostUrl = settings.HostUrl;
+                server.apiKey = settings.ApiKey;
+                servers[serverName] = server;
             }
         }
 
@@ -112,51 +141,61 @@ namespace GenericMessagingService.IntegrationTests
 
         private static async Task RunTests(Dictionary<string, Dictionary<string, MethodInfo>> tests)
         {
-            Logger.Log("Starting test run");
-            Logger.Log("");
+            var timer = new Stopwatch();
+            timer.Start();
+            Logger.LogDebug("Starting test run");
+            var testsCount = tests.Select(x => x.Value.Count).Sum();
+            var testNumber = 1;
+            var failures = new List<string>();
+            Logger.LogDebug(testsCount + " tests found");
             foreach(var (serverName, testMethods) in tests)
             {
-                Logger.Log($"Running tests for {serverName}");
-                Logger.Log("Starting server");
+                Logger.LogDebug($"Running tests for server '{serverName}'");
+                Logger.LogDebug("Starting server");
                 Server server;
                 try
                 {
                     server = servers[serverName].Get();
                 } catch(Exception ex)
                 {
-                    Logger.Log("Server start failed");
-                    Logger.Log(ex.Message);
-                    Logger.Log(ex.StackTrace);
+                    Logger.LogDebug("Server start failed");
+                    Logger.LogDebug(ex.Message);
+                    Logger.LogDebug(ex.StackTrace);
+                    failures.AddRange(testMethods.Select(x => $"'{x.Key}': Server start failed"));
                     continue;
                 }
-                Logger.Log("Server started");
-                Logger.Log("");
-                foreach(var (testName, method) in testMethods)
+                Logger.LogDebug("Server started");
+                foreach(var (testName, test) in testMethods)
                 {
-                    await RunTest(testName, method);
+                    Logger.LogDebug($"Running test '{testName}' {testNumber} of {testsCount}");
+                    testNumber++;
+                    var obj = testObjectCache[test.DeclaringType];
+                    try
+                    {
+                        test.Invoke(obj, new object[] { });
+                        Logger.LogDebug("Test completed successfully");
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.LogDebug("Test failed");
+                        Logger.LogDebug(ex.Message);
+                        Logger.LogDebug(ex.StackTrace);
+                        failures.Add($"'{testName}': Test failed");
+                    }
                 }
                 await server.DisposeAsync();
+                Logger.LogDebug($"Tests for server '{serverName}' completed");
             }
-        }
+            var elapsedTime = timer.Elapsed;
 
-        private static async Task RunTest(string testName, MethodInfo test)
-        {
-            Logger.Log($"Running test '{testName}'");
-            var obj = testObjectCache[test.DeclaringType];
-            try
+            Logger.LogDebug($"Test run completed in {elapsedTime.ToString("hh\\:mm\\:ss")}");
+            if (failures.Any())
             {
-                test.Invoke(obj, new object[] { });
-                Logger.Log("Test completed successfully");
+                Logger.LogDebug($"{failures.Count} tests failed");
+                foreach (var failure in failures) { Logger.LogDebug(failure); }
             }
-            catch (Exception ex)
-            {
-                Logger.Log("Test failed");
-                Logger.Log(ex.Message);
-                Logger.Log(ex.StackTrace);
-            }
-            finally
-            {
-                Logger.Log("");
+            else { 
+                Logger.LogDebug("All tests succeeded");
             }
         }
     }

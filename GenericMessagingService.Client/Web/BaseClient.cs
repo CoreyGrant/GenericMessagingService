@@ -39,14 +39,16 @@ namespace GenericMessagingService.Client.Web
             throw new Exception(apiResponse.Error);
         }
 
-        protected async Task Post<T>(string url, T data) where T : class
+        protected async Task<bool> Post<T>(string url, T data) where T : class
         {
             var client = GetHttpClient();
             var response = await client.PostAsJsonAsync(url, data);
             if (!response.IsSuccessStatusCode)
             {
-
+                return false;
             }
+            var apiResponse = await response.Content.ReadFromJsonAsync<ApiResponse>();
+            return apiResponse.Success;
         }
 
         protected async Task<HttpResponseMessage> PostWithRawResponse<T>(string url, T data) where T : class

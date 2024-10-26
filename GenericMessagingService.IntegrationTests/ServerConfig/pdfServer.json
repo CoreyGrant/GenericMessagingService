@@ -1,0 +1,21 @@
+{
+  "pdf": {
+    "chromeExePath": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+    "folder": {
+      "folderPath": "C:\\GMSTests\\Pdf"
+    }
+  },
+  "template": {
+    "location": {
+      "folder": {
+        "folderPath": "\\Data\\Templates\\Pdf\\",
+        "regex": {
+          "^([A-Za-z0-9]+)$": "{0}.cshtml"
+        }
+      }
+    },
+    "formatting": {
+      "razor": {}
+    }
+  }
+}

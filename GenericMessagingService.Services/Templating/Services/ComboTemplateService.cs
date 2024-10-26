@@ -18,11 +18,13 @@ namespace GenericMessagingService.Services.Templating.Services
 
         public ComboTemplateService(
             ComboTemplateSettings settings,
-            ITemplateServiceFactory templateServiceFactory)
+            ITemplateServiceFactory templateServiceFactory,
+            string? templateStrategy)
         {
             this.settings = settings;
             this.templateServices = new List<ITemplateService>();
-            var strategyParts = settings.Strategy.Split("|");
+            var strategy = templateStrategy ?? settings.Strategy;
+            var strategyParts = strategy.Split("|");
             foreach(var strategyPart in strategyParts)
             {
                 var config = settings.Combo[strategyPart];
@@ -59,18 +61,20 @@ namespace GenericMessagingService.Services.Templating.Services
         ITemplateService CreateComboTemplateService(ComboTemplateSettings settings);
     }
 
-    [InjectTransient(ServiceType.Template)]
+    [InjectScoped(ServiceType.Template)]
     public class ComboTemplateServiceFactory : IComboTemplateServiceFactory
     {
         private readonly ITemplateServiceFactory templateServiceFactory;
+        private readonly ITemplateStrategyService templateStrategyService;
 
-        public ComboTemplateServiceFactory(ITemplateServiceFactory templateServiceFactory) 
+        public ComboTemplateServiceFactory(ITemplateServiceFactory templateServiceFactory, ITemplateStrategyService templateStrategyService) 
         {
             this.templateServiceFactory = templateServiceFactory;
+            this.templateStrategyService = templateStrategyService;
         }
         public ITemplateService CreateComboTemplateService(ComboTemplateSettings settings)
         {
-            return new ComboTemplateService(settings, templateServiceFactory);
+            return new ComboTemplateService(settings, templateServiceFactory, templateStrategyService.TemplateStrategy);
         }
     }
 }

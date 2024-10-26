@@ -16,7 +16,7 @@ namespace GenericMessagingService.Services.Pdf.Services
         Task<Stream> GetPdfStream(string template);
     }
 
-    [InjectTransient(ServiceType.Pdf)]
+    [InjectScoped(ServiceType.Pdf)]
     internal class PuppeteerService : IPuppeteerService
     {
         private readonly IPuppeteerPool puppeteerPool;

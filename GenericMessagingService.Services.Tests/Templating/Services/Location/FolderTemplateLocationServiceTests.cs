@@ -27,7 +27,7 @@ namespace GenericMessagingService.Services.Tests.Templating.Services.Location
             var baseFolder = "folder\\";
             var config = new FolderTemplateLocationSettings
             {
-                BaseFolder = baseFolder,
+                FolderPath = baseFolder,
                 Fixed = new Dictionary<string, string>
                 {
                     [templateName] = "folder2\\folder3\\file.cshtml"
@@ -52,7 +52,7 @@ namespace GenericMessagingService.Services.Tests.Templating.Services.Location
             var baseFolder = "folder\\";
             var config = new FolderTemplateLocationSettings
             {
-                BaseFolder = baseFolder,
+                FolderPath = baseFolder,
                 Regex = new Dictionary<string, string>
                 {
                     ["templateName-([a-zA-Z0-9]+)$"] = "folder2\\folder3\\{0}.cshtml"
@@ -106,7 +106,7 @@ namespace GenericMessagingService.Services.Tests.Templating.Services.Location
                 {
                     ["Folder-([AB])-File-([1-9])"] = "/Folder-{0}/File-{1}"
                 },
-                BaseFolder = baseFolder
+                FolderPath = baseFolder
             };
             var fileManager = Substitute.For<IFileManager>();
             fileManager.WalkDirectory(baseFolder).Returns(directoryNames);

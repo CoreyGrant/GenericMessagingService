@@ -57,6 +57,15 @@ namespace GenericMessagingService.Services
                         container.AddSingleton(typeInterface, typeConcrete);
                     }
                 }
+
+                var scoped = injectType.GetCustomAttribute<InjectScopedAttribute>();
+                if(scoped != null)
+                {
+                    if(neededServiceTypes.Any(x => scoped.type == x))
+                    {
+                        container.AddScoped(typeInterface, typeConcrete);
+                    }
+                }
             }
 
             container.AddSingleton<ISendGridClient>((a) => new SendGridClient(new SendGridClientOptions

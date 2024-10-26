@@ -12,6 +12,7 @@ namespace GenericMessagingService.Services.Utils
 {
     public interface IFileManager
     {
+        bool FileExists(string path);
         Task<string> GetFileAsync(string path);
         Task WriteFileAsync(string path, string contents);
         Task WriteFileAsync(string path, MemoryStream contents);
@@ -22,9 +23,10 @@ namespace GenericMessagingService.Services.Utils
         char PathSeperator { get; }
     }
 
-    [InjectTransient]
+    [InjectScoped]
     internal class FileManager : IFileManager
     {
+        public bool FileExists(string path) => File.Exists(path);
         public async Task<string> GetFileAsync(string path)
         {
             return await File.ReadAllTextAsync(path);

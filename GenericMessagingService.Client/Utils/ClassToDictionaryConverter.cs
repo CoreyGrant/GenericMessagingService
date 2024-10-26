@@ -32,6 +32,7 @@ namespace GenericMessagingService.Client.Utils
         public IDictionary<string, string> Convert<T>(T obj) where T : class
         {
             var type = typeof(T)!;
+            if(type == typeof(Dictionary<string, string>)) { return (Dictionary<string, string>)(object)obj; }
             var dict = new Dictionary<string, string>();
             if (mappingCache.ContainsKey(type))
             {

@@ -18,32 +18,46 @@ namespace GenericMessagingService.Services.Templating.Services
         Task<List<string>> GetTemplateNames();
     }
 
-    [InjectTransient(ServiceType.Template)]
+    [InjectScoped(ServiceType.Template)]
     public class TemplateRunnerService : ITemplateRunnerService
     {
+        private readonly AppSettings settings;
+        private readonly ITemplateServiceFactory templateServiceFactory;
+        private readonly IComboTemplateServiceFactory comboTemplateServiceFactory;
         private ITemplateService templateService;
+        private ITemplateService TemplateService 
+        {
+            get
+            {
+                if(templateService != null) { return templateService; }
+                if (settings.Template != null)
+                {
+                    return templateService = templateServiceFactory.CreateTemplateService(settings.Template);
+                }
+                else 
+                {
+                    return templateService = comboTemplateServiceFactory.CreateComboTemplateService(settings.ComboTemplate);
+                }
+            } 
+        }
         public TemplateRunnerService(
             AppSettings settings,
             ITemplateServiceFactory templateServiceFactory,
             IComboTemplateServiceFactory comboTemplateServiceFactory)
         {
-            if (settings.Template != null)
-            {
-                templateService = templateServiceFactory.CreateTemplateService(settings.Template);
-            } else if (settings.ComboTemplate != null)
-            {
-                templateService = comboTemplateServiceFactory.CreateComboTemplateService(settings.ComboTemplate);
-            }
+            this.settings = settings;
+            this.templateServiceFactory = templateServiceFactory;
+            this.comboTemplateServiceFactory = comboTemplateServiceFactory;
         }
 
         public async Task<(string Body, string? Subject)?> RunTemplate(string templateName, IDictionary<string, string> data)
         {
-            return await templateService.GetTemplate(new Types.Template.TemplateRequest { Data = data, TemplateName = templateName });
+            return await TemplateService.GetTemplate(new Types.Template.TemplateRequest { Data = data, TemplateName = templateName });
         }
 
         public async Task<List<string>> GetTemplateNames()
         {
-            return await templateService.GetTemplateNames();
+            return await TemplateService.GetTemplateNames();
         }
     }
 }

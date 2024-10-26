@@ -10,13 +10,9 @@ using GenericMessagingService.Types.Shared;
 using GenericMessagingService.Types.Sms;
 using GenericMessagingService.Types.Template;
 using GenericMessagingService.WebApi.AzureServiceBus;
-using GenericMessagingService.WebApi.Filters;
 using GenericMessagingService.WebApi.Setup;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Newtonsoft.Json;
 using System.Net;
-using System.Reflection;
 
 namespace GenericMessagingService.WebApi
 {
@@ -126,7 +122,6 @@ namespace GenericMessagingService.WebApi
 
         private static void RegisterEmail(WebApplication app, string apiKey)
         {
-            app.Services.GetService<IEmailSenderService>();
             app.MapPost("/api/email", async (HttpRequest req, HttpResponse res) =>
             {
                 var guard = ApiGuard(req, apiKey);
@@ -135,25 +130,28 @@ namespace GenericMessagingService.WebApi
                 {
                     var bodyText = await sr.ReadToEndAsync();
                     var emailRequest = JsonConvert.DeserializeObject<EmailRequest>(bodyText);
-                    var emailSenderService = app.Services.GetService<IEmailSenderService>()!;
-                    ApiResponse result;
-                    try
+                    using (var scope = app.Services.CreateScope())
                     {
-                        await emailSenderService.SendEmailAsync(emailRequest);
-                        result = new ApiResponse(true);
-                    } catch(Exception ex)
-                    {
-                        result = new ApiResponse(ex.Message);
-                        res.StatusCode = 500;
+                        var emailSenderService = scope.ServiceProvider.GetService<IEmailSenderService>()!;
+                        ApiResponse result;
+                        try
+                        {
+                            await emailSenderService.SendEmailAsync(emailRequest);
+                            result = new ApiResponse(true);
+                        }
+                        catch (Exception ex)
+                        {
+                            result = new ApiResponse(ex.Message);
+                            res.StatusCode = 500;
+                        }
+                        await res.WriteAsJsonAsync(result);
                     }
-                    await res.WriteAsJsonAsync(result);
                 }
             });
         }
 
         private static void RegisterSms(WebApplication app, string apiKey)
         {
-            app.Services.GetService<ISmsSenderService>();
             app.MapPost("/api/sms", async (HttpRequest req, HttpResponse res) =>
             {
                 var guard = ApiGuard(req, apiKey);
@@ -162,26 +160,28 @@ namespace GenericMessagingService.WebApi
                 {
                     var bodyText = await sr.ReadToEndAsync();
                     var smsRequest = JsonConvert.DeserializeObject<SmsRequest>(bodyText);
-                    var smsSenderService = app.Services.GetService<ISmsSenderService>()!;
-                    ApiResponse result;
-                    try
+                    using (var scope = app.Services.CreateScope())
                     {
-                        await smsSenderService.SendSmsAsync(smsRequest);
-                        result = new ApiResponse(true);
+                        var smsSenderService = scope.ServiceProvider.GetService<ISmsSenderService>()!;
+                        ApiResponse result;
+                        try
+                        {
+                            await smsSenderService.SendSmsAsync(smsRequest);
+                            result = new ApiResponse(true);
+                        }
+                        catch (Exception ex)
+                        {
+                            result = new ApiResponse(ex.Message);
+                            res.StatusCode = 500;
+                        }
+                        await res.WriteAsJsonAsync(result);
                     }
-                    catch (Exception ex)
-                    {
-                        result = new ApiResponse(ex.Message);
-                        res.StatusCode = 500;
-                    }
-                    await res.WriteAsJsonAsync(result);
                 }
             });
         }
 
         private static void RegisterTemplate(WebApplication app, string apiKey)
         {
-            app.Services.GetService<ITemplateRunnerService>();
             app.MapPost("/api/template", async (HttpRequest req, HttpResponse res) =>
             {
                 var guard = ApiGuard(req, apiKey);
@@ -190,48 +190,54 @@ namespace GenericMessagingService.WebApi
                 {
                     var bodyText = await sr.ReadToEndAsync();
                     var templateRequest = JsonConvert.DeserializeObject<TemplateRequest>(bodyText);
-                    var templateRunnerService = app.Services.GetService<ITemplateRunnerService>()!;
-                    ApiResponse<TemplateResponse> result;
-                    try
+                    using (var scope = app.Services.CreateScope())
                     {
-                        var templateResult = await templateRunnerService.RunTemplate(templateRequest.TemplateName, templateRequest.Data);
-                        if (templateResult == null)
+                        var templateRunnerService = scope.ServiceProvider.GetService<ITemplateRunnerService>()!;
+                        ApiResponse<TemplateResponse> result;
+                        try
                         {
-                            result = new ApiResponse<TemplateResponse>("Failed to find template");
+                            var templateResult = await templateRunnerService.RunTemplate(templateRequest.TemplateName, templateRequest.Data);
+                            if (templateResult == null)
+                            {
+                                result = new ApiResponse<TemplateResponse>("Failed to find template");
+                            }
+                            else
+                            {
+                                result = new ApiResponse<TemplateResponse>(new TemplateResponse { Body = templateResult.Value.Body, Subject = templateResult.Value.Subject });
+                            }
                         }
-                        else
+                        catch (Exception ex)
                         {
-                            result = new ApiResponse<TemplateResponse>(new TemplateResponse { Body = templateResult.Value.Body, Subject = templateResult.Value.Subject });
+                            res.StatusCode = 500;
+                            result = new ApiResponse<TemplateResponse>(ex.Message);
                         }
+                        await res.WriteAsJsonAsync(result);
                     }
-                    catch (Exception ex)
-                    {
-                        res.StatusCode = 500;
-                        result = new ApiResponse<TemplateResponse>(ex.Message);
-                    }
-                    await res.WriteAsJsonAsync(result);
                 }
             });
             app.MapGet("/api/names", async (HttpRequest req, HttpResponse res) =>
             {
-                var templateRunnerService = app.Services.GetService<ITemplateRunnerService>()!;
-                ApiResponse<List<string>> result;
-                try
+                using (var scope = app.Services.CreateScope())
                 {
-                    var templateNameResult = await templateRunnerService.GetTemplateNames();
-                    result = new ApiResponse<List<string>>(templateNameResult);
-                } catch(Exception ex)
-                {
-                    result = new ApiResponse<List<string>>(ex.Message);
-                    res.StatusCode = 500;
+                    var templateRunnerService = scope.ServiceProvider.GetService<ITemplateRunnerService>()!;
+                    ApiResponse<List<string>> result;
+                    try
+                    {
+                        var templateNameResult = await templateRunnerService.GetTemplateNames();
+                        result = new ApiResponse<List<string>>(templateNameResult);
+                    }
+                    catch (Exception ex)
+                    {
+                        result = new ApiResponse<List<string>>(ex.Message);
+                        res.StatusCode = 500;
+                    }
+                    await res.WriteAsJsonAsync(result);
                 }
-                await res.WriteAsJsonAsync(result);
             });
         }
 
         private static void RegisterPdf(WebApplication app, string apiKey)
         {
-            app.Services.GetService<ISmsSenderService>();
             app.MapPost("/api/pdf", async (HttpRequest req, HttpResponse res) =>
             {
                 var guard = ApiGuard(req, apiKey);
@@ -240,22 +246,25 @@ namespace GenericMessagingService.WebApi
                 {
                     var bodyText = await sr.ReadToEndAsync();
                     var pdfRequest = JsonConvert.DeserializeObject<PdfRequest>(bodyText);
-                    var pdfGenerationService = app.Services.GetService<IPdfGenerationService>()!;
-                    ApiResponse result;
-                    try
+                    using (var scope = app.Services.CreateScope())
                     {
-                        var filename = string.IsNullOrEmpty(pdfRequest.Filename)
-                            ? pdfRequest.TemplateName.Replace("\\", "_").Replace("/", "_") + ".pdf"
-                            : pdfRequest.Filename;
-                        var pdfBytes = await pdfGenerationService.GetPdf(pdfRequest.TemplateName, pdfRequest.Data, filename);
+                        var pdfGenerationService = scope.ServiceProvider.GetService<IPdfGenerationService>()!;
+                        ApiResponse result;
+                        try
+                        {
+                            var filename = string.IsNullOrEmpty(pdfRequest.Filename)
+                                ? pdfRequest.TemplateName.Replace("\\", "_").Replace("/", "_") + ".pdf"
+                                : pdfRequest.Filename;
+                            var pdfBytes = await pdfGenerationService.GetPdf(pdfRequest.TemplateName, pdfRequest.Data, filename);
 
-                        res.Headers.ContentType = "application/pdf";
-                        res.Headers.ContentDisposition = filename;
-                        await res.BodyWriter.WriteAsync(pdfBytes);
-                    }
-                    catch (Exception ex)
-                    {
-                        res.StatusCode = 500;
+                            res.Headers.ContentType = "application/pdf";
+                            res.Headers.ContentDisposition = filename;
+                            await res.BodyWriter.WriteAsync(pdfBytes);
+                        }
+                        catch (Exception ex)
+                        {
+                            res.StatusCode = 500;
+                        }
                     }
                 }
             });

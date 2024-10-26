@@ -14,7 +14,7 @@ namespace GenericMessagingService.Services.Sms
         Task SendSmsAsync(SmsRequest request);
     }
 
-    [InjectTransient(ServiceType.Sms)]
+    [InjectScoped(ServiceType.Sms)]
     internal class SmsSenderService : ISmsSenderService
     {
         private readonly SmsSettings settings;
@@ -24,8 +24,10 @@ namespace GenericMessagingService.Services.Sms
         public SmsSenderService(
             AppSettings settings,
             ITemplateRunnerService templateRunnerService,
-            ISmsStrategyResolver smsStrategyResolver)
+            ISmsStrategyResolver smsStrategyResolver,
+            ITemplateStrategyService templateStrategyService)
         {
+            templateStrategyService.TemplateStrategy = settings.Sms.TemplateStrategy;
             this.settings = settings.Sms;
             this.templateRunnerService = templateRunnerService;
             this.smsService = smsStrategyResolver.Resolve();
@@ -54,7 +56,8 @@ namespace GenericMessagingService.Services.Sms
                         ? request.From
                         : settings.DefaultFromNumber;
                     await smsService.SendSms(template, toAddresses, fromAddress);
-                } else if(request.ToData != null)
+                }
+                else if (request.ToData != null)
                 {
                     var toMessages = new Dictionary<string, string>();
                     foreach (var (to, data) in request.ToData)
@@ -75,7 +78,10 @@ namespace GenericMessagingService.Services.Sms
                             : settings.DefaultFromNumber;
                     await smsService.SendSms(toMessages, fromAddress);
                 }
-                throw new System.Exception("Was given a template name but no data");
+                else
+                {
+                    throw new System.Exception("Was given a template name but no data");
+                }
             } else
             {
                 var toAddresses = !string.IsNullOrEmpty(settings.OverrideToNumber)

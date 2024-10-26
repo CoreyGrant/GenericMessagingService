@@ -15,7 +15,7 @@ namespace GenericMessagingService.Services.Email
         Task SendEmailAsync(EmailRequest request);
     }
 
-    [InjectTransient(ServiceType.Email)]
+    [InjectScoped(ServiceType.Email)]
     internal class EmailSenderService : IEmailSenderService
     {
         private readonly ITemplateRunnerService templateRunnerService;
@@ -25,8 +25,10 @@ namespace GenericMessagingService.Services.Email
         public EmailSenderService(
             EmailSettings emailSettings,
             ITemplateRunnerService templateRunnerService,
-            IEmailStrategyResolver emailServiceResolver)
+            IEmailStrategyResolver emailServiceResolver,
+            ITemplateStrategyService templateStrategyService)
         {
+            templateStrategyService.TemplateStrategy = emailSettings.TemplateStrategy;
             this.templateRunnerService = templateRunnerService;
             this.emailSettings = emailSettings;
             this.emailService = emailServiceResolver.Resolve();

@@ -15,12 +15,12 @@ namespace GenericMessagingService.Client.Web
         {
         }
 
-        public async Task SendPlainSms(
+        public async Task<bool> SendPlainSms(
             string to,
             string message,
             string? from = null)
         {
-            await SendSms(new SmsRequest
+            return await SendSms(new SmsRequest
             {
                 To = new[] { to },
                 Template = message,
@@ -28,12 +28,12 @@ namespace GenericMessagingService.Client.Web
             });
         }
 
-        public async Task SendPlainSms(
+        public async Task<bool> SendPlainSms(
             IList<string> to,
             string message,
             string? from = null)
         {
-            await SendSms(new SmsRequest
+            return await SendSms(new SmsRequest
             {
                 To = to,
                 Template = message,
@@ -41,13 +41,13 @@ namespace GenericMessagingService.Client.Web
             });
         }
 
-        public async Task SendTemplateSms(
+        public async Task<bool> SendTemplateSms(
             string to,
             string templateName,
             IDictionary<string, string> data,
             string? from = null)
         {
-            await SendSms(new SmsRequest
+            return await SendSms(new SmsRequest
             {
                 To = new[] { to },
                 TemplateName = templateName,
@@ -56,18 +56,18 @@ namespace GenericMessagingService.Client.Web
             });
         }
 
-        public async Task SendTemplateSms<T>(string to, string templateName, T data, string? from = null) where T : class
+        public async Task<bool> SendTemplateSms<T>(string to, string templateName, T data, string? from = null) where T : class
         {
-            await SendTemplateSms(to, templateName, converter.Convert(data), from);
+            return await SendTemplateSms(to, templateName, converter.Convert(data), from);
         }
 
-        public async Task SendTemplateSms(
+        public async Task<bool> SendTemplateSms(
             IList<string> to,
             string templateName,
             IDictionary<string, string> data,
             string? from = null)
         {
-            await SendSms(new SmsRequest
+            return await SendSms(new SmsRequest
             {
                 To = to,
                 TemplateName = templateName,
@@ -76,22 +76,22 @@ namespace GenericMessagingService.Client.Web
             });
         }
 
-        public async Task SendTemplateSms<T>(
+        public async Task<bool> SendTemplateSms<T>(
             IList<string> to,
             string templateName,
             T data,
             string? from = null) where T : class
         {
-            await SendTemplateSms(to, templateName, converter.Convert(data), from);
+            return await SendTemplateSms(to, templateName, converter.Convert(data), from);
         }
 
-        public async Task SendTemplateSms(
+        public async Task<bool> SendTemplateSms(
             IList<string> to,
             string templateName,
             IDictionary<string, IDictionary<string, string>> toData,
             string? from = null)
         {
-            await SendSms(new SmsRequest
+            return await SendSms(new SmsRequest
             {
                 To = to,
                 TemplateName = templateName,
@@ -100,18 +100,18 @@ namespace GenericMessagingService.Client.Web
             });
         }
 
-        public async Task SendTemplateSms<T>(
+        public async Task<bool> SendTemplateSms<T>(
             IList<string> to,
             string templateName,
             IDictionary<string, T> data,
             string? from = null) where T : class
         {
-            await SendTemplateSms(to, templateName, data.ToDictionary(x => x.Key, x => converter.Convert(x.Value)), from);
+            return await SendTemplateSms(to, templateName, data.ToDictionary(x => x.Key, x => converter.Convert(x.Value)), from);
         }
 
-        private async Task SendSms(SmsRequest smsRequest)
+        private async Task<bool> SendSms(SmsRequest smsRequest)
         {
-            await Post("/api/sms/", smsRequest);
+            return await Post("/api/sms/", smsRequest);
         }
     }
 }

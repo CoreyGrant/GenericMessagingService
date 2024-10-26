@@ -30,7 +30,7 @@ namespace GenericMessagingService.Services.StorageService
         IStorageService Create(AzureBlobStorageSettings settings);
     }
 
-    [InjectTransient]
+    [InjectScoped]
     public class AzureBlobStorageServiceFactory : IAzureBlobStorageServiceFactory
     {
         private readonly IAzureBlobStorageManagerFactory managerFactory;

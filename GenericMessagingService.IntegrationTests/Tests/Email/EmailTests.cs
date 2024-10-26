@@ -1,5 +1,7 @@
 ﻿using GenericMessagingService.Client;
 using GenericMessagingService.IntegrationTests.Attributes;
+using GenericMessagingService.WebApi;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,14 +10,10 @@ using System.Threading.Tasks;
 
 namespace GenericMessagingService.IntegrationTests.Tests.Email
 {
-    [Test("Email")]
+    [TestFixture("Email")]
     internal class EmailTests : TestBase
     {
-        public EmailTests(ILogger logger, WebClientSettings clientSettings) : base(logger, clientSettings)
-        {
-        }
-
-        [TestName("Test email")]
+        [Test]
         public void TestEmail()
         {
             var toEmailAddress = "test@test.com";

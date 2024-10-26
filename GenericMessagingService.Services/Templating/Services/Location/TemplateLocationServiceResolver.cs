@@ -16,27 +16,35 @@ namespace GenericMessagingService.Services.Templating.Services.Location
         ITemplateLocationService Resolve(TemplateLocationSettings settings);
     }
 
-    [InjectTransient(ServiceType.Template)]
+    [InjectScoped(ServiceType.Template)]
     public class TemplateLocationServiceResolver : ITemplateLocationServiceResolver
     {
         private readonly IDatabaseStrategyResolver databaseStrategyResolver;
         private readonly IFileManager fileManager;
+        private readonly ITemplateStrategyService templateStrategyService;
+        private readonly IAzureBlobStorageManager azureBlobStorageManager;
 
         public TemplateLocationServiceResolver(
             IDatabaseStrategyResolver databaseStrategyResolver,
-            IFileManager fileManager)
+            IFileManager fileManager,
+            ITemplateStrategyService templateStrategyService,
+            IAzureBlobStorageManager azureBlobStorageManager)
         {
             this.databaseStrategyResolver = databaseStrategyResolver;
             this.fileManager = fileManager;
+            this.templateStrategyService = templateStrategyService;
+            this.azureBlobStorageManager = azureBlobStorageManager;
         }
 
         public ITemplateLocationService Resolve(TemplateLocationSettings settings)
         {
             var database = settings.Database;
             var folder = settings.Folder;
-            if (!string.IsNullOrEmpty(settings.Strategy))
+            var azureBlobStorage = settings.AzureBlobStorage;
+            var strategy = settings.Strategy;
+            if (!string.IsNullOrEmpty(strategy))
             {
-                var strategyParts = settings.Strategy.Split("|");
+                var strategyParts = strategy.Split("|");
                 var services = new List<ITemplateLocationService>(); 
                 foreach(var strategyPart in strategyParts)
                 {
@@ -46,6 +54,9 @@ namespace GenericMessagingService.Services.Templating.Services.Location
                     } else if(strategyPart == "folder")
                     {
                         services.Add(new FolderTemplateLocationService(folder, fileManager));
+                    } else if(strategyPart == "azureBlobStorage")
+                    {
+                        services.Add(new AzureBlobStorageTemplateLocationService(azureBlobStorage, azureBlobStorageManager));
                     }
                 }
                 return new ComboTemplateLocationService(services);
@@ -58,6 +69,9 @@ namespace GenericMessagingService.Services.Templating.Services.Location
                 else if (folder != null)
                 {
                     return new FolderTemplateLocationService(folder, fileManager);
+                } else if(azureBlobStorage != null)
+                {
+                    return new AzureBlobStorageTemplateLocationService(azureBlobStorage, azureBlobStorageManager);
                 }
             }
             

@@ -12,7 +12,7 @@ namespace GenericMessagingService.Services.Cache
         string GetHash(string str);
     }
 
-    [InjectTransient]
+    [InjectScoped]
     public class HashSerice : IHashService
     {
         private readonly FastHashes.FastHash64 hash;

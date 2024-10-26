@@ -21,11 +21,22 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\Templates\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="Data\Templates\Test1.cshtml">
+    <None Update="Data\Templates\Email\OldEmail\Test1.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\Templates\Email\OldEmail\Test2.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\Templates\Email\Test1.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\Templates\Pdf\Test1.cshtml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\Templates\Sms\Test1.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ServerConfig\pdfServer.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

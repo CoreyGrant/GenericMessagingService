@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "GenericMessagingService.IntegrationTests": {
+      "commandName": "Project"
+    }
+  }
+}

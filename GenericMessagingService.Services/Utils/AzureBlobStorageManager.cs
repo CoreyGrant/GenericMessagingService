@@ -15,6 +15,9 @@ namespace GenericMessagingService.Services.Utils
         Task StoreFile(Stream file, string location, string filename);
         Task StoreFile(string file, string location, string filename);
         Task StoreFile(byte[] file, string location, string filename);
+        bool FileExists(string filename);
+        Task<string> GetFileAsync(string filename);
+        List<string> GetFilenames();
     }
 
     public class AzureBlobStorageManager : IAzureBlobStorageManager
@@ -55,6 +58,28 @@ namespace GenericMessagingService.Services.Utils
                 var response = await this.client.UploadBlobAsync(fullFileName, fileStream);
             }
         }
+
+        public bool FileExists(string filename)
+        {
+            var matchingBlobs = this.client.FindBlobsByTags($"Name = '{filename}'");
+            return matchingBlobs.Any();
+        }
+
+        public async Task<string> GetFileAsync(string filename)
+        {
+            var azureResponse = await this.client.GetBlobClient(filename).DownloadContentAsync();
+            if(azureResponse.Value != null)
+            {
+                return azureResponse.Value.Content.ToString();
+            }
+            return null;
+        }
+
+        public List<string> GetFilenames()
+        {
+            var blobs = this.client.GetBlobs().Select(x => x.Name);
+            return blobs.ToList();
+        }
     }
 
     public interface IAzureBlobStorageManagerFactory
@@ -62,7 +87,7 @@ namespace GenericMessagingService.Services.Utils
         IAzureBlobStorageManager Create(AzureBlobStorageSettings settings);
     }
 
-    [InjectTransient]
+    [InjectScoped]
     public class AzureBlobStorageManagerFactory : IAzureBlobStorageManagerFactory
     {
         public IAzureBlobStorageManager Create(AzureBlobStorageSettings settings)

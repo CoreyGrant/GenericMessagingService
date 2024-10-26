@@ -159,9 +159,9 @@ namespace GenericMessagingService.WebApi.Setup
                 }
 
                 var folder = location.Folder;
-                var remote = location.Remote;
+                var azureBlobStorage = location.AzureBlobStorage;
                 var database = location.Database;
-                var locations = new object?[] { folder, remote, database }.Where(x => x != null);
+                var locations = new object?[] { folder, azureBlobStorage, database }.Where(x => x != null);
 
                 if (!locations.Any())
                 {
@@ -174,7 +174,7 @@ namespace GenericMessagingService.WebApi.Setup
 
                 if(folder != null)
                 {
-                    if (string.IsNullOrEmpty(folder.BaseFolder))
+                    if (string.IsNullOrEmpty(folder.FolderPath))
                     {
                         throw new ConfigValidationException("Template Folder BaseFolder is required" + subString);
                     }

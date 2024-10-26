@@ -76,7 +76,7 @@ namespace GenericMessagingService.Services.Templating.Services
         ITemplateService CreateTemplateService(TemplateSettings templateSettings);
     }
 
-    [InjectTransient(ServiceType.Template)]
+    [InjectScoped(ServiceType.Template)]
     public class TemplateServiceFactory : ITemplateServiceFactory
     {
         private readonly ITemplateLocationServiceResolver templateLocationServiceResolver;

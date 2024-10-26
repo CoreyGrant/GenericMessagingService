@@ -12,6 +12,7 @@ namespace GenericMessagingService.IntegrationTests.Helpers
 {
     public static class ServerHelper
     {
+        public static ILogger logger;
         public static Server StartServer(GenericMessagingServiceSettings settings, string hostUrl)
         {
             return new Server(settings, hostUrl);
@@ -38,6 +39,7 @@ namespace GenericMessagingService.IntegrationTests.Helpers
             app.UseStaticFiles();
             // Configure the HTTP request pipeline.
             app.UseHttpsRedirection();
+
             app.RunAsync();
         }
 

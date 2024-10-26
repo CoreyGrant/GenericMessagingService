@@ -15,7 +15,7 @@ namespace GenericMessagingService.Services.Templating.Services.Formatting
         ITemplateFormattingService Resolve(TemplateSettings settings);
     }
 
-    [InjectTransient(ServiceType.Template)]
+    [InjectScoped(ServiceType.Template)]
     public class TemplateFormattingServiceResolver : ITemplateFormattingServiceResolver
     {
         private readonly IRazorEngine razorEngine;

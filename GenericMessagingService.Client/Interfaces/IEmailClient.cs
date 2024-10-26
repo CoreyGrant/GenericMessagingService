@@ -16,7 +16,7 @@ namespace GenericMessagingService.Client.Interfaces
         /// <param name="subject">The email subject</param>
         /// <param name="from">The from address</param>
         /// <returns></returns>
-        Task SendPlainEmail(string to, string body, string subject, string? from = null);
+        Task<bool> SendPlainEmail(string to, string body, string subject, string? from = null);
         /// <summary>
         /// Send a plain email to multiple email addresses
         /// </summary>
@@ -25,7 +25,7 @@ namespace GenericMessagingService.Client.Interfaces
         /// <param name="subject">The email subject</param>
         /// <param name="from">The from address</param>
         /// <returns></returns>
-        Task SendPlainEmail(IList<string> to, string body, string subject, string? from = null);
+        Task<bool> SendPlainEmail(IList<string> to, string body, string subject, string? from = null);
         /// <summary>
         /// Send a templated email to a single address
         /// </summary>
@@ -35,7 +35,7 @@ namespace GenericMessagingService.Client.Interfaces
         /// <param name="subject">The email subject</param>
         /// <param name="from">The from address</param>
         /// <returns></returns>
-        Task SendTemplateEmail(string to, string templateName, IDictionary<string, string> data, string? subject = null, string? from = null);
+        Task<bool> SendTemplateEmail(string to, string templateName, IDictionary<string, string> data, string? subject = null, string? from = null);
         /// <summary>
         /// Send a templated email to a single address
         /// </summary>
@@ -46,11 +46,11 @@ namespace GenericMessagingService.Client.Interfaces
         /// <param name="subject">The email subject</param>
         /// <param name="from">The from address</param>
         /// <returns></returns>
-        Task SendTemplateEmail<T>(string to, string templateName, T data, string? subject, string? from) where T : class;
-        Task SendTemplateEmail(IList<string> to, string templateName, IDictionary<string, string> data, string? subject = null, string? from = null);
-        Task SendTemplateEmail<T>(IList<string> to, string templateName, T data, string? subject = null, string? from = null) where T : class;
-        Task SendTemplateEmail(IList<string> to, string templateName, IDictionary<string, IDictionary<string, string>> toData, string? subject = null, string? from = null);
-        Task SendTemplateEmail<T>(IList<string> to, string templateName, IDictionary<string, T> data, string? subject = null, string? from = null) where T : class;
+        Task<bool> SendTemplateEmail<T>(string to, string templateName, T data, string? subject, string? from) where T : class;
+        Task<bool> SendTemplateEmail(IList<string> to, string templateName, IDictionary<string, string> data, string? subject = null, string? from = null);
+        Task<bool> SendTemplateEmail<T>(IList<string> to, string templateName, T data, string? subject = null, string? from = null) where T : class;
+        Task<bool> SendTemplateEmail(IList<string> to, string templateName, IDictionary<string, IDictionary<string, string>> toData, string? subject = null, string? from = null);
+        Task<bool> SendTemplateEmail<T>(IList<string> to, string templateName, IDictionary<string, T> data, string? subject = null, string? from = null) where T : class;
     }
 
 }

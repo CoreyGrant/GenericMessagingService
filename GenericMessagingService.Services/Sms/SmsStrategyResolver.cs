@@ -16,7 +16,7 @@ namespace GenericMessagingService.Services.Sms
         ISmsService Resolve();
     }
 
-    [InjectTransient(ServiceType.Sms)]
+    [InjectScoped(ServiceType.Sms)]
     internal class SmsStrategyResolver : ISmsStrategyResolver
     {
         private readonly SmsSettings smsSettings;

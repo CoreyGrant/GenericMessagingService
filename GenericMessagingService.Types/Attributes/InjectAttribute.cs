@@ -38,4 +38,11 @@ namespace GenericMessagingService.Types.Attributes
         {
         }
     }
+
+    public class InjectScopedAttribute : InjectAttribute
+    {
+        public InjectScopedAttribute(ServiceType type = ServiceType.Default) : base(type)
+        {
+        }
+    }
 }

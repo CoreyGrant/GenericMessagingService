@@ -13,13 +13,13 @@ namespace GenericMessagingService.Client.AzureServiceBus
     {
         public EmailClient(IServiceBusClient serviceBusClient, IClassToDictionaryConverter converter): base(serviceBusClient, converter) { }
 
-        public async Task SendPlainEmail(
+        public async Task<bool> SendPlainEmail(
             string to,
             string body,
             string subject,
             string? from = null)
         {
-            await AddEmailMessage(new EmailRequest
+            return await AddEmailMessage(new EmailRequest
             {
                 To = new[] { to },
                 Template = body,
@@ -28,13 +28,13 @@ namespace GenericMessagingService.Client.AzureServiceBus
             });
         }
 
-        public async Task SendPlainEmail(
+        public async Task<bool> SendPlainEmail(
             IList<string> to,
             string body,
             string subject,
             string? from = null)
         {
-            await AddEmailMessage(new EmailRequest
+            return await AddEmailMessage(new EmailRequest
             {
                 To = to,
                 Template = body,
@@ -43,14 +43,14 @@ namespace GenericMessagingService.Client.AzureServiceBus
             });
         }
 
-        public async Task SendTemplateEmail(
+        public async Task<bool> SendTemplateEmail(
             string to,
             string templateName,
             IDictionary<string, string> data,
             string? subject = null,
             string? from = null)
         {
-            await AddEmailMessage(new EmailRequest
+            return await AddEmailMessage(new EmailRequest
             {
                 To = new[] { to },
                 TemplateName = templateName,
@@ -60,24 +60,24 @@ namespace GenericMessagingService.Client.AzureServiceBus
             });
         }
 
-        public async Task SendTemplateEmail<T>(
+        public async Task<bool> SendTemplateEmail<T>(
             string to,
             string templateName,
             T data,
             string? subject,
             string? from) where T : class
         {
-            await SendTemplateEmail(to, templateName, converter.Convert(data), subject, from);
+            return await SendTemplateEmail(to, templateName, converter.Convert(data), subject, from);
         }
 
-        public async Task SendTemplateEmail(
+        public async Task<bool> SendTemplateEmail(
             IList<string> to,
             string templateName,
             IDictionary<string, string> data,
             string? subject = null,
             string? from = null)
         {
-            await AddEmailMessage(new EmailRequest
+            return await AddEmailMessage(new EmailRequest
             {
                 To = to,
                 TemplateName = templateName,
@@ -87,24 +87,24 @@ namespace GenericMessagingService.Client.AzureServiceBus
             });
         }
 
-        public async Task SendTemplateEmail<T>(
+        public async Task<bool> SendTemplateEmail<T>(
             IList<string> to,
             string templateName,
             T data,
             string? subject = null,
             string? from = null) where T : class
         {
-            await SendTemplateEmail(to, templateName, converter.Convert(data), subject, from);
+            return await SendTemplateEmail(to, templateName, converter.Convert(data), subject, from);
         }
 
-        public async Task SendTemplateEmail(
+        public async Task<bool> SendTemplateEmail(
             IList<string> to,
             string templateName,
             IDictionary<string, IDictionary<string, string>> toData,
             string? subject = null,
             string? from = null)
         {
-            await AddEmailMessage(new EmailRequest
+            return await AddEmailMessage(new EmailRequest
             {
                 To = to,
                 TemplateName = templateName,
@@ -114,19 +114,20 @@ namespace GenericMessagingService.Client.AzureServiceBus
             });
         }
 
-        public async Task SendTemplateEmail<T>(
+        public async Task<bool> SendTemplateEmail<T>(
             IList<string> to,
             string templateName,
             IDictionary<string, T> data,
             string? subject = null,
             string? from = null) where T : class
         {
-            await SendTemplateEmail(to, templateName, data.ToDictionary(x => x.Key, x => converter.Convert(x.Value)), subject, from);
+            return await SendTemplateEmail(to, templateName, data.ToDictionary(x => x.Key, x => converter.Convert(x.Value)), subject, from);
         }
 
-        private async Task AddEmailMessage(EmailRequest emailRequest)
+        private async Task<bool> AddEmailMessage(EmailRequest emailRequest)
         {
             await this.serviceBusClient.AddEmailMessage(emailRequest);
+            return true;
         }
     }
 }

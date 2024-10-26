@@ -13,10 +13,6 @@ namespace GenericMessagingService.IntegrationTests.Servers
     [Server("Email")]
     internal class EmailServer : BaseServer
     {
-        public EmailServer(string hostUrl, string apiKey) : base(hostUrl, apiKey)
-        {
-        }
-
         protected override AppSettings AppSettings => new AppSettings
         {
             Email = new EmailSettings
@@ -28,7 +24,7 @@ namespace GenericMessagingService.IntegrationTests.Servers
                 Location = new TemplateLocationSettings
                 {
                     Folder = new FolderTemplateLocationSettings{
-                        BaseFolder = Path.Join(AppContext.BaseDirectory, "\\Data\\Templates\\"),
+                        FolderPath = Path.Join(AppContext.BaseDirectory, "\\Data\\Templates\\Email\\"),
                         Regex = new Dictionary<string, string>
                         {
                             ["^([A-Za-z0-9]+)$"] = "{0}.cshtml"

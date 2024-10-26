@@ -19,7 +19,7 @@ namespace GenericMessagingService.Services.Pdf
         Task<byte[]> GetPdf(string templateName, IDictionary<string, string> data, string filename);
     }
 
-    [InjectTransient(ServiceType.Pdf)]
+    [InjectScoped(ServiceType.Pdf)]
     internal class PdfGenerationService : IPdfGenerationService
     {
         private readonly PdfSettings pdfSettings;
@@ -35,8 +35,10 @@ namespace GenericMessagingService.Services.Pdf
             IPuppeteerService puppeteerService,
             ITemplateRunnerService templateRunnerService,
             IAzureBlobStorageServiceFactory azureBlobStorageServiceFactory,
-            IFileManager fileManager) 
+            IFileManager fileManager,
+            ITemplateStrategyService templateStrategyService) 
         {
+            templateStrategyService.TemplateStrategy = pdfSettings.TemplateStrategy;
             this.pdfSettings = pdfSettings;
             this.puppeteerService = puppeteerService;
             this.templateRunnerService = templateRunnerService;

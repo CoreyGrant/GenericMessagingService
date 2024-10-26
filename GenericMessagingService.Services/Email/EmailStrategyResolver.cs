@@ -17,7 +17,7 @@ namespace GenericMessagingService.Services.Email
         IEmailService Resolve();
     }
 
-    [InjectTransient(ServiceType.Email)]
+    [InjectScoped(ServiceType.Email)]
     internal class EmailStrategyResolver : IEmailStrategyResolver
     {
         private readonly EmailSettings settings;

@@ -8,6 +8,9 @@
     "sms": {
       "$ref": "#/$defs/sms"
     },
+    "pdf": {
+      "$ref":  "#/$defs/pdf"
+    },
     "template": {
       "$ref": "#/$defs/template"
     },
@@ -20,6 +23,9 @@
       "type": "object",
       "description": "The sms options",
       "properties": {
+        "templateStrategy": {
+          "type": "string"
+        },
         "overrideToNumber": {
           "type": "string"
         },
@@ -40,6 +46,9 @@
         },
         "folder": {
           "$ref": "#/$defs/folder"
+        },
+        "azureBlobStorage": {
+          "$ref": "#/$defs/azureBlobStorageSettings"
         }
       },
       "oneOf": [
@@ -51,6 +60,9 @@
       "type": "object",
       "description": "The email options",
       "properties": {
+        "templateStrategy": {
+          "type": "string"
+        },
         "overrideToAddress": {
           "type": "string"
         },
@@ -78,6 +90,9 @@
         },
         "folder": {
           "$ref": "#/$defs/folder"
+        },
+        "azureBlobStorage": {
+          "$ref": "#/$defs/azureBlobStorageSettings"
         }
       },
       "oneOf": [
@@ -86,6 +101,23 @@
         { "required": [ "sendGrid" ] },
         { "required": [ "mailChimp" ] }
       ]
+    },
+    "pdf": {
+      "type": "object",
+      "properties": {
+        "templateStrategy": {
+          "type": "string"
+        },
+        "chromeExePath": {
+          "type": "string"
+        },
+        "folder": {
+          "$ref": "#/$defs/folder"
+        },
+        "azureBlobSettings": {
+          "$ref": "#/$defs/azureBlobStorageSettings"
+        }
+      }
     },
     "template": {
       "type": "object",
@@ -122,11 +154,23 @@
             "folder": {
               "type": "object",
               "properties": {
-                "baseFolder": { "type": "string" },
+                "folderPath": { "type": "string" },
+                "nameAsPath": {"type": "boolean"},
                 "fixed": { "type": "object" },
                 "regex": { "type": "object" }
               },
-              "required": ["baseFolder", "fixed", "regex"]
+              "required": ["folderPath"]
+            },
+            "azureBlobStorage":{
+              "type": "object",
+              "properties": {
+                "connectionString": { "type": "string" },
+                "containerName": {"type": "string"},
+                "nameAsPath": {"type": "boolean"},
+                "fixed": { "type": "object" },
+                "regex": { "type": "object" }
+              },
+              "required": ["folderPath"]
             }
           },
           "additionalProperties": false
@@ -167,6 +211,14 @@
         }
       },
       "required": [ "folderPath" ]
+    },
+    "azureBlobStorageSettings": {
+      "type": "object",
+      "properties": {
+        "connectionString": { "type": "string" },
+        "containerName": { "type": "string" }
+      },
+      "required": ["connectionString", "containerName"]
     }
   }
 }

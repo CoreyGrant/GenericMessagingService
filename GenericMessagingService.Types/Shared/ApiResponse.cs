@@ -8,6 +8,7 @@ namespace GenericMessagingService.Types.Shared
 {
     public class ApiResponse
     {
+        public ApiResponse() { }
         public ApiResponse(bool success) { Success = success; }
         public ApiResponse(string error)
         {
@@ -21,6 +22,7 @@ namespace GenericMessagingService.Types.Shared
 
     public class ApiResponse<T> : ApiResponse where T : class
     {
+        public ApiResponse() : base() { }
         public ApiResponse(string error): base(error) { }
         public ApiResponse(T data) : base(true)
         {

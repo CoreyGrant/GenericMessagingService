@@ -16,7 +16,7 @@ namespace GenericMessagingService.Services.Templating.Database
     /// <summary>
     /// Different databases can be configured
     /// </summary>
-    [InjectTransient(ServiceType.Template)]
+    [InjectScoped(ServiceType.Template)]
     public class DatabaseStrategyResolver : IDatabaseStrategyResolver
     {
         public DatabaseStrategyResolver() 

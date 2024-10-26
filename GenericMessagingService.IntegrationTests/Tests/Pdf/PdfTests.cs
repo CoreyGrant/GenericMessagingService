@@ -1,5 +1,7 @@
 ﻿using GenericMessagingService.Client;
 using GenericMessagingService.IntegrationTests.Attributes;
+using GenericMessagingService.WebApi;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,14 +12,10 @@ using Xunit;
 
 namespace GenericMessagingService.IntegrationTests.Tests.Pdf
 {
-    [Test("Pdf")]
+    [TestFixture("Pdf")]
     internal class PdfTests : TestBase
     {
-        public PdfTests(ILogger logger, WebClientSettings clientSettings) : base(logger, clientSettings)
-        {
-        }
-
-        [TestName("Test pdf")]
+        [Test]
         public void TestPdf()
         {
             var templateName = "Test1";

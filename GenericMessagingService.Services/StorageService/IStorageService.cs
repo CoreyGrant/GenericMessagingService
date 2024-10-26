@@ -15,6 +15,7 @@ namespace GenericMessagingService.Services.StorageService
             using (var sw = new StreamWriter(stream))
             {
                 sw.Write(file);
+                sw.Flush();
                 return this.StoreFile(stream, location, path);
             }
         }

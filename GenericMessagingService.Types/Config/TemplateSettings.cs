@@ -23,15 +23,15 @@ namespace GenericMessagingService.Types.Config
     {
         public string? Strategy { get; set; }
         public FolderTemplateLocationSettings? Folder { get; set; }
-        public RemoteTemplateLocationSettings? Remote { get; set; }
+        public AzureBlobStorageTemplateLocationSettings? AzureBlobStorage { get; set; }
         public DatabaseTemplateLocationSettings? Database { get; set; }
     }
 
     #region Location
 
-    public class FolderTemplateLocationSettings
+    public interface IFileTemplateLocationSettings
     {
-        public string? BaseFolder { get; set; }
+        public bool? NameAsPath { get; set; }
         /// <summary>
         /// A mapping from template name to folder location. Checked before regex.
         /// </summary>
@@ -43,9 +43,32 @@ namespace GenericMessagingService.Types.Config
         public Dictionary<string, string> Regex { get; set; }
     }
 
-    public class RemoteTemplateLocationSettings
+    public class FolderTemplateLocationSettings : FolderSettings, IFileTemplateLocationSettings
     {
+        public bool? NameAsPath { get; set; }
+        /// <summary>
+        /// A mapping from template name to folder location. Checked before regex.
+        /// </summary>
+        public Dictionary<string, string> Fixed { get; set; }
 
+        /// <summary>
+        /// A mapping from template name to folder location, using regex with match groups for the tempate name, and a format string for the folder location
+        /// </summary>
+        public Dictionary<string, string> Regex { get; set; }
+    }
+
+    public class AzureBlobStorageTemplateLocationSettings: AzureBlobStorageSettings, IFileTemplateLocationSettings
+    {
+        public bool? NameAsPath { get; set; }
+        /// <summary>
+        /// A mapping from template name to folder location. Checked before regex.
+        /// </summary>
+        public Dictionary<string, string> Fixed { get; set; }
+
+        /// <summary>
+        /// A mapping from template name to folder location, using regex with match groups for the tempate name, and a format string for the folder location
+        /// </summary>
+        public Dictionary<string, string> Regex { get; set; }
     }
 
     public class DatabaseTemplateLocationSettings

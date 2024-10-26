@@ -6,18 +6,23 @@ using System.Threading.Tasks;
 
 namespace GenericMessagingService.IntegrationTests.Attributes
 {
-    internal class TestAttribute : Attribute
+    internal class TestFixtureAttribute : Attribute
     {
-        public TestAttribute(string serverName) { ServerName = serverName; }
+        public TestFixtureAttribute(string serverName, string testFixtureName = null)
+        {
+            ServerName = serverName;
+            TestFixtureName = testFixtureName;
+        }
         public string ServerName { get; }
+        public string TestFixtureName { get; }
     }
 
-    internal class TestNameAttribute : Attribute
+    internal class TestAttribute : Attribute
     {
-        public string Name { get; }
-        public TestNameAttribute(string name)
+        public string TestName { get; }
+        public TestAttribute(string testName = null)
         {
-            Name = name;
+            TestName = testName;
         }
     }
 
